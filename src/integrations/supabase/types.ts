@@ -14,14 +14,73 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_audit_logs: {
+        Row: {
+          action: string
+          admin_id: string
+          created_at: string
+          id: string
+          notes: string | null
+          target_id: string | null
+          target_type: string | null
+        }
+        Insert: {
+          action: string
+          admin_id: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Update: {
+          action?: string
+          admin_id?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Relationships: []
+      }
+      blocked_users: {
+        Row: {
+          anonymous_user_id: string
+          blocked_by_admin_id: string | null
+          created_at: string
+          id: string
+          reason: string | null
+          status: string
+        }
+        Insert: {
+          anonymous_user_id: string
+          blocked_by_admin_id?: string | null
+          created_at?: string
+          id?: string
+          reason?: string | null
+          status?: string
+        }
+        Update: {
+          anonymous_user_id?: string
+          blocked_by_admin_id?: string | null
+          created_at?: string
+          id?: string
+          reason?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       comments: {
         Row: {
           anonymous_user_id: string
           comment_text: string
           company_id: string
           created_at: string
+          deleted_at: string | null
           id: string
           parent_comment_id: string | null
+          report_count: number
           status: string
         }
         Insert: {
@@ -29,8 +88,10 @@ export type Database = {
           comment_text: string
           company_id: string
           created_at?: string
+          deleted_at?: string | null
           id?: string
           parent_comment_id?: string | null
+          report_count?: number
           status?: string
         }
         Update: {
@@ -38,8 +99,10 @@ export type Database = {
           comment_text?: string
           company_id?: string
           created_at?: string
+          deleted_at?: string | null
           id?: string
           parent_comment_id?: string | null
+          report_count?: number
           status?: string
         }
         Relationships: [
@@ -64,36 +127,45 @@ export type Database = {
           category: string
           created_at: string
           description: string | null
+          email: string | null
           id: string
           location: string | null
+          logo_url: string | null
           name: string
           phone: string | null
           services: string | null
           status: string
+          updated_at: string
           website: string | null
         }
         Insert: {
           category: string
           created_at?: string
           description?: string | null
+          email?: string | null
           id?: string
           location?: string | null
+          logo_url?: string | null
           name: string
           phone?: string | null
           services?: string | null
           status?: string
+          updated_at?: string
           website?: string | null
         }
         Update: {
           category?: string
           created_at?: string
           description?: string | null
+          email?: string | null
           id?: string
           location?: string | null
+          logo_url?: string | null
           name?: string
           phone?: string | null
           services?: string | null
           status?: string
+          updated_at?: string
           website?: string | null
         }
         Relationships: []
@@ -169,6 +241,47 @@ export type Database = {
           },
         ]
       }
+      reported_comments: {
+        Row: {
+          comment_id: string
+          created_at: string
+          id: string
+          reason: string
+          reported_by_anonymous_user_id: string
+          reviewed_at: string | null
+          reviewed_by_admin_id: string | null
+          status: string
+        }
+        Insert: {
+          comment_id: string
+          created_at?: string
+          id?: string
+          reason: string
+          reported_by_anonymous_user_id: string
+          reviewed_at?: string | null
+          reviewed_by_admin_id?: string | null
+          status?: string
+        }
+        Update: {
+          comment_id?: string
+          created_at?: string
+          id?: string
+          reason?: string
+          reported_by_anonymous_user_id?: string
+          reviewed_at?: string | null
+          reviewed_by_admin_id?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reported_comments_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -202,6 +315,8 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_admin_tier: { Args: { _user_id: string }; Returns: boolean }
+      is_blocked: { Args: { _anon_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user" | "super_admin" | "sub_admin"
