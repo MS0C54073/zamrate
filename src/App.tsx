@@ -5,6 +5,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import AdminLogin from "./pages/AdminLogin.tsx";
+import AdminDashboard from "./pages/AdminDashboard.tsx";
+import { AdminLockButton } from "./components/AdminLockButton";
 
 const queryClient = new QueryClient();
 
@@ -16,9 +19,12 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <AdminLockButton />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

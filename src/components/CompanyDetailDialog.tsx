@@ -94,7 +94,7 @@ export function CompanyDetailDialog({ company, open, onOpenChange, onRatingChang
     });
     if (error) return toast.error(error.message);
     if (parent) { setReplyText(""); setReplyTo(null); } else { setNewComment(""); }
-    toast.success("Comment posted anonymously.");
+    toast.success("Submitted! Pending moderation before it appears publicly.");
     await loadAll();
   }
 
