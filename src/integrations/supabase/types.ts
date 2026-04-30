@@ -14,7 +14,161 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      comments: {
+        Row: {
+          anonymous_user_id: string
+          comment_text: string
+          company_id: string
+          created_at: string
+          id: string
+          parent_comment_id: string | null
+          status: string
+        }
+        Insert: {
+          anonymous_user_id: string
+          comment_text: string
+          company_id: string
+          created_at?: string
+          id?: string
+          parent_comment_id?: string | null
+          status?: string
+        }
+        Update: {
+          anonymous_user_id?: string
+          comment_text?: string
+          company_id?: string
+          created_at?: string
+          id?: string
+          parent_comment_id?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      companies: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          location: string | null
+          name: string
+          phone: string | null
+          services: string | null
+          status: string
+          website: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          location?: string | null
+          name: string
+          phone?: string | null
+          services?: string | null
+          status?: string
+          website?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          location?: string | null
+          name?: string
+          phone?: string | null
+          services?: string | null
+          status?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
+      company_suggestions: {
+        Row: {
+          category: string
+          company_name: string
+          created_at: string
+          description: string | null
+          id: string
+          services: string | null
+          status: string
+          suggested_by_anonymous_user_id: string
+        }
+        Insert: {
+          category: string
+          company_name: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          services?: string | null
+          status?: string
+          suggested_by_anonymous_user_id: string
+        }
+        Update: {
+          category?: string
+          company_name?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          services?: string | null
+          status?: string
+          suggested_by_anonymous_user_id?: string
+        }
+        Relationships: []
+      }
+      ratings: {
+        Row: {
+          anonymous_user_id: string
+          company_id: string
+          created_at: string
+          id: string
+          rating: number
+          rating_change_count: number
+          updated_at: string
+        }
+        Insert: {
+          anonymous_user_id: string
+          company_id: string
+          created_at?: string
+          id?: string
+          rating: number
+          rating_change_count?: number
+          updated_at?: string
+        }
+        Update: {
+          anonymous_user_id?: string
+          company_id?: string
+          created_at?: string
+          id?: string
+          rating?: number
+          rating_change_count?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ratings_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
