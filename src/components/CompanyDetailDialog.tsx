@@ -8,8 +8,21 @@ import { supabase } from "@/integrations/supabase/client";
 import { getAnonId } from "@/lib/anonId";
 import { iconFor } from "@/lib/categories";
 import { toast } from "sonner";
-import { MessageCircle, CornerDownRight, Lock } from "lucide-react";
+import { MessageCircle, CornerDownRight, Lock, Clock } from "lucide-react";
 import type { Company, CommentRow } from "@/types";
+
+function timeAgo(iso: string): string {
+  const diff = Math.max(0, Date.now() - new Date(iso).getTime());
+  const s = Math.floor(diff / 1000);
+  if (s < 60) return `${s}s ago`;
+  const m = Math.floor(s / 60);
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  const d = Math.floor(h / 24);
+  if (d < 30) return `${d}d ago`;
+  return new Date(iso).toLocaleDateString();
+}
 
 interface Props {
   company: Company | null;
