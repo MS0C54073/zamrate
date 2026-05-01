@@ -21,6 +21,14 @@ export default function Index() {
 
   useEffect(() => {
     void load();
+
+    const channel = supabase
+      .channel("public-listings")
+      .on("postgres_changes", { event: "*", schema: "public", table: "ratings" }, () => void load())
+      .on("postgres_changes", { event: "*", schema: "public", table: "companies" }, () => void load())
+      .subscribe();
+
+    return () => { void supabase.removeChannel(channel); };
   }, []);
 
   async function load() {
