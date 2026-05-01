@@ -17,6 +17,7 @@ import SubAdmins from "./pages/admin/SubAdmins";
 import AuditLogs from "./pages/admin/AuditLogs";
 import Settings from "./pages/admin/Settings";
 import { AdminLockButton } from "./components/AdminLockButton";
+import { SecrecyBackground } from "./components/SecrecyBackground";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <SecrecyBackground />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/admin-login" element={<AdminLogin />} />
