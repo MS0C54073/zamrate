@@ -16,8 +16,7 @@ import {
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, perm: "any" },
   { to: "/admin/companies", label: "Companies", icon: Building2, perm: "manageCompanies" },
-  { to: "/admin/comments", label: "Comments", icon: MessagesSquare, perm: "manageComments" },
-  { to: "/admin/reports", label: "Reported", icon: Flag, perm: "reviewReports" },
+  { to: "/admin/reports", label: "Reported Comments", icon: Flag, perm: "reviewReports" },
   { to: "/admin/suggestions", label: "Suggestions", icon: Lightbulb, perm: "approveSuggestions" },
   { to: "/admin/users", label: "Users", icon: Users, perm: "viewUsers" },
   { to: "/admin/sub-admins", label: "Sub Admins", icon: ShieldCheck, perm: "manageSubAdmins" },
