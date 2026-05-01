@@ -212,7 +212,10 @@ export function CompanyDetailDialog({ company, open, onOpenChange, onRatingChang
             )}
             {topComments.map((c) => (
               <div key={c.id} className="bg-secondary/40 rounded-2xl p-4">
-                <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">Anonymous</div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Anonymous</span>
+                  <span className="text-xs text-muted-foreground/70 inline-flex items-center gap-1"><Clock className="size-3" />{timeAgo(c.created_at)}</span>
+                </div>
                 <p className="text-sm whitespace-pre-wrap">{c.comment_text}</p>
                 <button onClick={() => setReplyTo(replyTo === c.id ? null : c.id)} className="text-xs text-primary font-semibold mt-2 hover:underline">
                   {replyTo === c.id ? "Cancel" : "Reply"}
