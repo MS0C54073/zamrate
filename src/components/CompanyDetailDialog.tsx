@@ -42,6 +42,7 @@ export function CompanyDetailDialog({ company, open, onOpenChange, onRatingChang
   const [newComment, setNewComment] = useState("");
   const [replyTo, setReplyTo] = useState<string | null>(null);
   const [replyText, setReplyText] = useState("");
+  const [, setNow] = useState(Date.now());
 
   const anonId = getAnonId();
 
