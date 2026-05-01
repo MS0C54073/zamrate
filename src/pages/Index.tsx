@@ -81,6 +81,7 @@ export default function Index() {
             <ThemeToggle />
             <SuggestCompanyDialog />
           </div>
+        </div>
       </header>
 
       {/* Hero */}
