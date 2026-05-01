@@ -234,7 +234,10 @@ export function CompanyDetailDialog({ company, open, onOpenChange, onRatingChang
                   <div key={r.id} className="mt-3 ml-4 pl-4 border-l-2 border-accent/40 flex gap-2">
                     <CornerDownRight className="size-4 text-muted-foreground mt-1 shrink-0" />
                     <div>
-                      <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">Anonymous</div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Anonymous</span>
+                        <span className="text-xs text-muted-foreground/70 inline-flex items-center gap-1"><Clock className="size-3" />{timeAgo(r.created_at)}</span>
+                      </div>
                       <p className="text-sm whitespace-pre-wrap">{r.comment_text}</p>
                     </div>
                   </div>
