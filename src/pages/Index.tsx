@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Search, Shield, Users, Sparkles } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { CATEGORIES, ALL_CATEGORY } from "@/lib/categories";
@@ -76,7 +77,10 @@ export default function Index() {
               className="pl-11 bg-accent/10 border-2 border-transparent focus-visible:border-accent focus-visible:bg-card rounded-2xl h-11"
             />
           </div>
-          <SuggestCompanyDialog />
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
+            <SuggestCompanyDialog />
+          </div>
         </div>
       </header>
 
