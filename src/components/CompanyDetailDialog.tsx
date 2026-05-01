@@ -8,8 +8,21 @@ import { supabase } from "@/integrations/supabase/client";
 import { getAnonId } from "@/lib/anonId";
 import { iconFor } from "@/lib/categories";
 import { toast } from "sonner";
-import { MessageCircle, CornerDownRight, Lock } from "lucide-react";
+import { MessageCircle, CornerDownRight, Lock, Clock } from "lucide-react";
 import type { Company, CommentRow } from "@/types";
+
+function timeAgo(iso: string): string {
+  const diff = Math.max(0, Date.now() - new Date(iso).getTime());
+  const s = Math.floor(diff / 1000);
+  if (s < 60) return `${s}s ago`;
+  const m = Math.floor(s / 60);
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  const d = Math.floor(h / 24);
+  if (d < 30) return `${d}d ago`;
+  return new Date(iso).toLocaleDateString();
+}
 
 interface Props {
   company: Company | null;
@@ -29,12 +42,36 @@ export function CompanyDetailDialog({ company, open, onOpenChange, onRatingChang
   const [newComment, setNewComment] = useState("");
   const [replyTo, setReplyTo] = useState<string | null>(null);
   const [replyText, setReplyText] = useState("");
+  const [, setNow] = useState(Date.now());
 
   const anonId = getAnonId();
 
   useEffect(() => {
     if (!company || !open) return;
     void loadAll();
+
+    // Live tick for "time ago" labels
+    const tick = setInterval(() => setNow(Date.now()), 30_000);
+
+    // Realtime subscriptions for ratings + comments scoped to this company
+    const channel = supabase
+      .channel(`company-${company.id}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "ratings", filter: `company_id=eq.${company.id}` },
+        () => { void loadAll(); onRatingChanged(); },
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "comments", filter: `company_id=eq.${company.id}` },
+        () => { void loadAll(); },
+      )
+      .subscribe();
+
+    return () => {
+      clearInterval(tick);
+      void supabase.removeChannel(channel);
+    };
   }, [company, open]);
 
   async function loadAll() {
@@ -175,7 +212,10 @@ export function CompanyDetailDialog({ company, open, onOpenChange, onRatingChang
             )}
             {topComments.map((c) => (
               <div key={c.id} className="bg-secondary/40 rounded-2xl p-4">
-                <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">Anonymous</div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Anonymous</span>
+                  <span className="text-xs text-muted-foreground/70 inline-flex items-center gap-1"><Clock className="size-3" />{timeAgo(c.created_at)}</span>
+                </div>
                 <p className="text-sm whitespace-pre-wrap">{c.comment_text}</p>
                 <button onClick={() => setReplyTo(replyTo === c.id ? null : c.id)} className="text-xs text-primary font-semibold mt-2 hover:underline">
                   {replyTo === c.id ? "Cancel" : "Reply"}
@@ -194,7 +234,10 @@ export function CompanyDetailDialog({ company, open, onOpenChange, onRatingChang
                   <div key={r.id} className="mt-3 ml-4 pl-4 border-l-2 border-accent/40 flex gap-2">
                     <CornerDownRight className="size-4 text-muted-foreground mt-1 shrink-0" />
                     <div>
-                      <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">Anonymous</div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Anonymous</span>
+                        <span className="text-xs text-muted-foreground/70 inline-flex items-center gap-1"><Clock className="size-3" />{timeAgo(r.created_at)}</span>
+                      </div>
                       <p className="text-sm whitespace-pre-wrap">{r.comment_text}</p>
                     </div>
                   </div>
