@@ -106,6 +106,9 @@
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   }
+  .dark body { background-color: transparent; }
+  html.dark { background-color: hsl(var(--background)); }
+}
   h1, h2, h3, h4 {
     font-family: 'Fraunces', Georgia, serif;
     font-weight: 600;
