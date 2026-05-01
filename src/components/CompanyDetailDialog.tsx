@@ -48,6 +48,29 @@ export function CompanyDetailDialog({ company, open, onOpenChange, onRatingChang
   useEffect(() => {
     if (!company || !open) return;
     void loadAll();
+
+    // Live tick for "time ago" labels
+    const tick = setInterval(() => setNow(Date.now()), 30_000);
+
+    // Realtime subscriptions for ratings + comments scoped to this company
+    const channel = supabase
+      .channel(`company-${company.id}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "ratings", filter: `company_id=eq.${company.id}` },
+        () => { void loadAll(); onRatingChanged(); },
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "comments", filter: `company_id=eq.${company.id}` },
+        () => { void loadAll(); },
+      )
+      .subscribe();
+
+    return () => {
+      clearInterval(tick);
+      void supabase.removeChannel(channel);
+    };
   }, [company, open]);
 
   async function loadAll() {
