@@ -117,4 +117,26 @@
   .font-display { font-family: 'Fraunces', Georgia, serif; }
   .shadow-card { box-shadow: var(--shadow-card); }
   .shadow-card-hover { box-shadow: var(--shadow-card-hover); }
+
+  @keyframes secrecy-scan {
+    0%   { transform: translateY(-10vh); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateY(110vh); opacity: 0; }
+  }
+  @keyframes secrecy-pulse {
+    0%, 100% { opacity: 0.14; transform: scale(1); }
+    50%      { opacity: 0.22; transform: scale(1.02); }
+  }
+  @keyframes secrecy-flicker {
+    0%, 100% { opacity: 1; }
+    47%      { opacity: 1; }
+    48%      { opacity: 0.6; }
+    49%      { opacity: 1; }
+    72%      { opacity: 0.85; }
+    73%      { opacity: 1; }
+  }
+  .animate-secrecy-scan   { animation: secrecy-scan 7s linear infinite; }
+  .animate-secrecy-pulse  { animation: secrecy-pulse 8s ease-in-out infinite; }
+  .animate-secrecy-flicker{ animation: secrecy-flicker 6s steps(1,end) infinite; }
 }
