@@ -77,8 +77,10 @@ export default function Index() {
               className="pl-11 bg-accent/10 border-2 border-transparent focus-visible:border-accent focus-visible:bg-card rounded-2xl h-11"
             />
           </div>
-          <SuggestCompanyDialog />
-        </div>
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
+            <SuggestCompanyDialog />
+          </div>
       </header>
 
       {/* Hero */}
