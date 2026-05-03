@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -9,7 +10,10 @@ interface Props {
   className?: string;
 }
 
-export function StarRating({ value, onChange, size = 20, readOnly = false, className }: Props) {
+export const StarRating = forwardRef<HTMLDivElement, Props>(function StarRating(
+  { value, onChange, size = 20, readOnly = false, className },
+  ref,
+) {
   return (
     <div className={cn("inline-flex items-center gap-1", className)}>
       {[1, 2, 3, 4, 5].map((n) => {
