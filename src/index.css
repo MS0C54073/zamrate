@@ -108,6 +108,40 @@
   }
   .dark body { background-color: transparent; }
   html.dark { background-color: hsl(var(--background)); }
+
+  /* Readability boost over the animated secrecy background (dark mode only).
+     Adds a subtle backdrop blur + tint to surfaces so text stays legible
+     against the matrix rain / hooded silhouette overlay. */
+  .dark {
+    --foreground: 220 20% 96%;
+    --muted-foreground: 220 15% 75%;
+    --card-foreground: 220 20% 96%;
+    --popover-foreground: 220 20% 96%;
+    --secondary-foreground: 220 20% 96%;
+    --border: 225 12% 28%;
+  }
+  .dark body {
+    text-shadow: 0 1px 2px hsl(225 30% 4% / 0.55);
+  }
+  .dark .bg-card,
+  .dark [class*="bg-card"],
+  .dark .bg-background,
+  .dark .bg-popover,
+  .dark .bg-secondary,
+  .dark .bg-muted {
+    background-color: hsl(var(--card) / 0.82) !important;
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
+  }
+  .dark header,
+  .dark nav,
+  .dark aside,
+  .dark [role="dialog"],
+  .dark [data-sidebar] {
+    background-color: hsl(var(--card) / 0.85);
+    backdrop-filter: blur(12px) saturate(125%);
+    -webkit-backdrop-filter: blur(12px) saturate(125%);
+  }
   h1, h2, h3, h4 {
     font-family: 'Fraunces', Georgia, serif;
     font-weight: 600;
