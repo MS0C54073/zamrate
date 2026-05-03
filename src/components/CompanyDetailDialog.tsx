@@ -78,7 +78,7 @@ export function CompanyDetailDialog({ company, open, onOpenChange, onRatingChang
     if (!company) return;
     const [{ data: ratings }, { data: cs }] = await Promise.all([
       supabase.from("ratings").select("id, rating, rating_change_count, anonymous_user_id").eq("company_id", company.id),
-      supabase.from("comments").select("id, company_id, parent_comment_id, comment_text, created_at").eq("company_id", company.id).order("created_at", { ascending: true }),
+      supabase.from("comments").select("id, company_id, parent_comment_id, comment_text, created_at, anonymous_user_id").eq("company_id", company.id).order("created_at", { ascending: true }),
     ]);
     const rs = ratings ?? [];
     setCount(rs.length);
