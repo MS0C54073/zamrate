@@ -7,6 +7,7 @@ import { CATEGORIES, ALL_CATEGORY } from "@/lib/categories";
 import { CompanyCard } from "@/components/CompanyCard";
 import { CompanyDetailDialog } from "@/components/CompanyDetailDialog";
 import { SuggestCompanyDialog } from "@/components/SuggestCompanyDialog";
+import { Recommendations } from "@/components/Recommendations";
 import type { Company } from "@/types";
 
 interface RatingAgg { company_id: string; sum: number; count: number; }
