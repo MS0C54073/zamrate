@@ -211,15 +211,18 @@ export function CompanyDetailDialog({ company, open, onOpenChange, onRatingChang
             {topComments.length === 0 && (
               <p className="text-sm text-muted-foreground text-center py-6">No comments yet. Be the first.</p>
             )}
-            {topComments.map((c) => (
+            {topComments.map((c) => {
+              const mine = c.anonymous_user_id === anonId;
+              return (
               <div key={c.id} className="bg-secondary/40 rounded-2xl p-4">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Anonymous</span>
+                <div className="flex items-center gap-2 mb-1 flex-wrap">
+                  <span className="text-xs font-bold uppercase tracking-widest text-foreground/80">{anonHandle(c.anonymous_user_id)}</span>
+                  {mine && <Badge variant="outline" className="text-[10px] py-0 h-4 border-primary/40 text-primary">you</Badge>}
                   <span className="text-xs text-muted-foreground/70 inline-flex items-center gap-1"><Clock className="size-3" />{timeAgo(c.created_at)}</span>
                 </div>
                 <p className="text-sm whitespace-pre-wrap">{c.comment_text}</p>
                 <button onClick={() => setReplyTo(replyTo === c.id ? null : c.id)} className="text-xs text-primary font-semibold mt-2 hover:underline">
-                  {replyTo === c.id ? "Cancel" : "Reply"}
+                  {replyTo === c.id ? "Cancel" : `Reply${repliesOf(c.id).length ? ` · ${repliesOf(c.id).length}` : ""}`}
                 </button>
 
                 {replyTo === c.id && (
@@ -231,20 +234,25 @@ export function CompanyDetailDialog({ company, open, onOpenChange, onRatingChang
                   </div>
                 )}
 
-                {repliesOf(c.id).map((r) => (
+                {repliesOf(c.id).map((r) => {
+                  const rmine = r.anonymous_user_id === anonId;
+                  return (
                   <div key={r.id} className="mt-3 ml-4 pl-4 border-l-2 border-accent/40 flex gap-2">
                     <CornerDownRight className="size-4 text-muted-foreground mt-1 shrink-0" />
                     <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Anonymous</span>
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
+                        <span className="text-xs font-bold uppercase tracking-widest text-foreground/80">{anonHandle(r.anonymous_user_id)}</span>
+                        {rmine && <Badge variant="outline" className="text-[10px] py-0 h-4 border-primary/40 text-primary">you</Badge>}
                         <span className="text-xs text-muted-foreground/70 inline-flex items-center gap-1"><Clock className="size-3" />{timeAgo(r.created_at)}</span>
                       </div>
                       <p className="text-sm whitespace-pre-wrap">{r.comment_text}</p>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </DialogContent>
