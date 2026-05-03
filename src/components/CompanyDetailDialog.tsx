@@ -9,6 +9,7 @@ import { getAnonId } from "@/lib/anonId";
 import { iconFor } from "@/lib/categories";
 import { toast } from "sonner";
 import { MessageCircle, CornerDownRight, Lock, Clock } from "lucide-react";
+import { anonHandle } from "@/lib/anonHandle";
 import type { Company, CommentRow } from "@/types";
 
 function timeAgo(iso: string): string {
