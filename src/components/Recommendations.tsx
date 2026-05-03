@@ -74,7 +74,9 @@ export function Recommendations() {
     if (!parsed.success) return toast.error("Please fill all fields (title 3-200, details 3-2000).");
     setSubmitting(true);
     const { error } = await supabase.from("recommendations").insert({
-      ...parsed.data,
+      title: parsed.data.title,
+      body: parsed.data.body,
+      category: parsed.data.category,
       anonymous_user_id: anonId,
     });
     setSubmitting(false);
