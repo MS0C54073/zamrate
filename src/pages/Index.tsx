@@ -176,6 +176,8 @@ export default function Index() {
           <InfoCard icon={<Users className="size-6" />} title="Fair & balanced" text="One rating per company per person. Up to three edits — then your rating is locked." />
           <InfoCard icon={<Sparkles className="size-6" />} title="Built for Zambia" text="Citizens, not algorithms, decide who deserves applause and who needs to do better." />
         </section>
+
+        <Recommendations />
       </main>
 
       <footer className="bg-foreground text-background py-12 px-4 sm:px-6">
