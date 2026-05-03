@@ -15,4 +15,5 @@ export interface CommentRow {
   parent_comment_id: string | null;
   comment_text: string;
   created_at: string;
+  anonymous_user_id: string;
 }
