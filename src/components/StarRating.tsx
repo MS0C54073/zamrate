@@ -15,7 +15,7 @@ export const StarRating = forwardRef<HTMLDivElement, Props>(function StarRating(
   ref,
 ) {
   return (
-    <div className={cn("inline-flex items-center gap-1", className)}>
+    <div ref={ref} className={cn("inline-flex items-center gap-1", className)}>
       {[1, 2, 3, 4, 5].map((n) => {
         const filled = n <= Math.round(value);
         return (
@@ -42,4 +42,4 @@ export const StarRating = forwardRef<HTMLDivElement, Props>(function StarRating(
       })}
     </div>
   );
-}
+});
