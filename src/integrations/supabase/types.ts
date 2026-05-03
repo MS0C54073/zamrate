@@ -241,6 +241,86 @@ export type Database = {
           },
         ]
       }
+      recommendation_votes: {
+        Row: {
+          anonymous_user_id: string
+          created_at: string
+          id: string
+          recommendation_id: string
+          updated_at: string
+          vote: number
+        }
+        Insert: {
+          anonymous_user_id: string
+          created_at?: string
+          id?: string
+          recommendation_id: string
+          updated_at?: string
+          vote: number
+        }
+        Update: {
+          anonymous_user_id?: string
+          created_at?: string
+          id?: string
+          recommendation_id?: string
+          updated_at?: string
+          vote?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_votes_recommendation_id_fkey"
+            columns: ["recommendation_id"]
+            isOneToOne: false
+            referencedRelation: "recommendations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendations: {
+        Row: {
+          admin_response: string | null
+          anonymous_user_id: string
+          body: string
+          category: string
+          created_at: string
+          deleted_at: string | null
+          downvotes: number
+          id: string
+          status: string
+          title: string
+          updated_at: string
+          upvotes: number
+        }
+        Insert: {
+          admin_response?: string | null
+          anonymous_user_id: string
+          body: string
+          category?: string
+          created_at?: string
+          deleted_at?: string | null
+          downvotes?: number
+          id?: string
+          status?: string
+          title: string
+          updated_at?: string
+          upvotes?: number
+        }
+        Update: {
+          admin_response?: string | null
+          anonymous_user_id?: string
+          body?: string
+          category?: string
+          created_at?: string
+          deleted_at?: string | null
+          downvotes?: number
+          id?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          upvotes?: number
+        }
+        Relationships: []
+      }
       reported_comments: {
         Row: {
           comment_id: string
