@@ -84,14 +84,14 @@ export function SecrecyBackground() {
     >
       {/* Hooded silhouette image */}
       <div
-        className="absolute inset-0 bg-center bg-cover opacity-[0.18] blur-[2px] animate-secrecy-pulse"
+        className="absolute inset-0 bg-center bg-cover opacity-[0.10] blur-[3px] animate-secrecy-pulse"
         style={{ backgroundImage: `url(${bg})` }}
       />
-      {/* Color wash to keep design system harmony */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background" />
+      {/* Color wash to keep design system harmony + boost contrast for foreground UI */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/80 to-background" />
 
-      {/* Matrix code rain */}
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-40" />
+      {/* Matrix code rain — dimmed so text stays readable */}
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-25" />
 
       {/* Scanning line */}
       <div className="absolute inset-x-0 h-[2px] bg-primary/30 blur-[2px] animate-secrecy-scan" />
