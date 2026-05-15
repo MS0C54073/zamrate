@@ -205,6 +205,32 @@ export default function AdminRecommendations() {
           );
         })}
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between pt-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="rounded-xl gap-1"
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft className="size-4" /> Prev
+          </Button>
+          <span className="text-sm text-muted-foreground tabular-nums">
+            Page {currentPage} of {totalPages}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            className="rounded-xl gap-1"
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+          >
+            Next <ChevronRight className="size-4" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
