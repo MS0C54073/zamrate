@@ -12,6 +12,7 @@ import Companies from "./pages/admin/Companies";
 import Comments from "./pages/admin/Comments";
 import Reports from "./pages/admin/Reports";
 import Suggestions from "./pages/admin/Suggestions";
+import Recommendations from "./pages/admin/Recommendations";
 import Users from "./pages/admin/Users";
 import SubAdmins from "./pages/admin/SubAdmins";
 import AuditLogs from "./pages/admin/AuditLogs";
