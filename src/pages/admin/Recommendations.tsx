@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { logAdminAction } from "@/hooks/useAdmin";
 import { anonHandle } from "@/lib/anonHandle";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Lightbulb, Trash2, Save } from "lucide-react";
+import { Lightbulb, Trash2, Save, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 
 interface Rec {
