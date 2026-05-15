@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { logAdminAction } from "@/hooks/useAdmin";
 import { anonHandle } from "@/lib/anonHandle";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Lightbulb, Trash2, Save } from "lucide-react";
+import { Lightbulb, Trash2, Save, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 
 interface Rec {
@@ -36,6 +37,9 @@ export default function AdminRecommendations() {
   const [items, setItems] = useState<Rec[]>([]);
   const [drafts, setDrafts] = useState<Record<string, { status: string; admin_response: string }>>({});
   const [filter, setFilter] = useState<string>("all");
+  const [query, setQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   useEffect(() => {
     void load();
@@ -84,24 +88,67 @@ export default function AdminRecommendations() {
     toast.success("Removed.");
   }
 
-  const filtered = filter === "all" ? items : items.filter((r) => r.status === filter);
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return items.filter((r) => {
+      if (filter !== "all" && r.status !== filter) return false;
+      if (!q) return true;
+      return (
+        r.title.toLowerCase().includes(q) ||
+        r.body.toLowerCase().includes(q) ||
+        r.category.toLowerCase().includes(q) ||
+        anonHandle(r.anonymous_user_id).toLowerCase().includes(q) ||
+        (r.admin_response?.toLowerCase().includes(q) ?? false)
+      );
+    });
+  }, [items, filter, query]);
+
+  useEffect(() => { setPage(1); }, [query, filter, pageSize]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  const pageStart = (currentPage - 1) * pageSize;
+  const paginated = filtered.slice(pageStart, pageStart + pageSize);
 
   return (
     <div className="space-y-5">
-      <div className="flex items-end justify-between border-b border-accent/20 pb-4">
+      <div className="flex flex-wrap items-end justify-between gap-3 border-b border-accent/20 pb-4">
         <div>
           <h1 className="font-display text-2xl flex items-center gap-2">
             <Lightbulb className="size-6 text-primary" /> Community Recommendations
           </h1>
           <p className="text-sm text-muted-foreground">Triage user-submitted ideas, respond, and update status.</p>
         </div>
-        <Select value={filter} onValueChange={setFilter}>
-          <SelectTrigger className="w-44 rounded-xl"><SelectValue /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All</SelectItem>
-            {STATUSES.map((s) => <SelectItem key={s} value={s}>{s.replace("_", " ")}</SelectItem>)}
-          </SelectContent>
-        </Select>
+        <div className="flex flex-wrap gap-2 items-center">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search title, body, author…"
+              className="pl-9 rounded-xl w-64"
+            />
+          </div>
+          <Select value={filter} onValueChange={setFilter}>
+            <SelectTrigger className="w-44 rounded-xl"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All statuses</SelectItem>
+              {STATUSES.map((s) => <SelectItem key={s} value={s}>{s.replace("_", " ")}</SelectItem>)}
+            </SelectContent>
+          </Select>
+          <Select value={String(pageSize)} onValueChange={(v) => setPageSize(Number(v))}>
+            <SelectTrigger className="w-28 rounded-xl"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {[10, 25, 50, 100].map((n) => <SelectItem key={n} value={String(n)}>{n} / page</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      <div className="text-xs text-muted-foreground">
+        {filtered.length === 0
+          ? "No matches"
+          : `Showing ${pageStart + 1}–${Math.min(pageStart + pageSize, filtered.length)} of ${filtered.length}`}
       </div>
 
       {filtered.length === 0 && (
@@ -109,7 +156,7 @@ export default function AdminRecommendations() {
       )}
 
       <div className="space-y-3">
-        {filtered.map((r) => {
+        {paginated.map((r) => {
           const d = drafts[r.id] ?? { status: r.status, admin_response: r.admin_response ?? "" };
           const score = r.upvotes - r.downvotes;
           return (
@@ -158,6 +205,32 @@ export default function AdminRecommendations() {
           );
         })}
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between pt-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="rounded-xl gap-1"
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft className="size-4" /> Prev
+          </Button>
+          <span className="text-sm text-muted-foreground tabular-nums">
+            Page {currentPage} of {totalPages}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            className="rounded-xl gap-1"
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+          >
+            Next <ChevronRight className="size-4" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
