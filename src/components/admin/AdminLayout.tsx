@@ -18,6 +18,7 @@ const NAV = [
   { to: "/admin/companies", label: "Companies", icon: Building2, perm: "manageCompanies" },
   { to: "/admin/reports", label: "Reported Comments", icon: Flag, perm: "reviewReports" },
   { to: "/admin/suggestions", label: "Suggestions", icon: Lightbulb, perm: "approveSuggestions" },
+  { to: "/admin/recommendations", label: "Recommendations", icon: Lightbulb, perm: "any" },
   { to: "/admin/users", label: "Users", icon: Users, perm: "viewUsers" },
   { to: "/admin/sub-admins", label: "Sub Admins", icon: ShieldCheck, perm: "manageSubAdmins" },
   { to: "/admin/audit", label: "Audit Logs", icon: ScrollText, perm: "viewAuditLogs" },
