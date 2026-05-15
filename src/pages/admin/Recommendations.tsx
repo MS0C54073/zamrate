@@ -37,6 +37,9 @@ export default function AdminRecommendations() {
   const [items, setItems] = useState<Rec[]>([]);
   const [drafts, setDrafts] = useState<Record<string, { status: string; admin_response: string }>>({});
   const [filter, setFilter] = useState<string>("all");
+  const [query, setQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   useEffect(() => {
     void load();
