@@ -38,6 +38,7 @@ const App = () => (
             <Route path="comments" element={<Comments />} />
             <Route path="reports" element={<Reports />} />
             <Route path="suggestions" element={<Suggestions />} />
+            <Route path="recommendations" element={<Recommendations />} />
             <Route path="users" element={<Users />} />
             <Route path="sub-admins" element={<SubAdmins />} />
             <Route path="audit" element={<AuditLogs />} />
