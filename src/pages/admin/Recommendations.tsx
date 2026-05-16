@@ -118,7 +118,7 @@ export default function AdminRecommendations() {
     return list;
   }, [items, filter, query, sort]);
 
-  useEffect(() => { setPage(1); }, [query, filter, pageSize]);
+  useEffect(() => { setPage(1); }, [query, filter, sort, pageSize]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const currentPage = Math.min(page, totalPages);
