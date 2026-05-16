@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Lightbulb, Trash2, Save, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { Lightbulb, Trash2, Save, Search, ChevronLeft, ChevronRight, ArrowUpDown } from "lucide-react";
 import { toast } from "sonner";
 
 interface Rec {
@@ -38,6 +38,7 @@ export default function AdminRecommendations() {
   const [drafts, setDrafts] = useState<Record<string, { status: string; admin_response: string }>>({});
   const [filter, setFilter] = useState<string>("all");
   const [query, setQuery] = useState("");
+  const [sort, setSort] = useState<"newest" | "oldest" | "top_voted" | "status">("newest");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
@@ -90,7 +91,7 @@ export default function AdminRecommendations() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return items.filter((r) => {
+    let list = items.filter((r) => {
       if (filter !== "all" && r.status !== filter) return false;
       if (!q) return true;
       return (
@@ -101,9 +102,23 @@ export default function AdminRecommendations() {
         (r.admin_response?.toLowerCase().includes(q) ?? false)
       );
     });
-  }, [items, filter, query]);
+    switch (sort) {
+      case "oldest":
+        list.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+        break;
+      case "top_voted":
+        list.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes));
+        break;
+      case "status":
+        list.sort((a, b) => a.status.localeCompare(b.status) || new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        break;
+      default: // newest
+        list.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    }
+    return list;
+  }, [items, filter, query, sort]);
 
-  useEffect(() => { setPage(1); }, [query, filter, pageSize]);
+  useEffect(() => { setPage(1); }, [query, filter, sort, pageSize]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const currentPage = Math.min(page, totalPages);
@@ -140,6 +155,18 @@ export default function AdminRecommendations() {
             <SelectTrigger className="w-28 rounded-xl"><SelectValue /></SelectTrigger>
             <SelectContent>
               {[10, 25, 50, 100].map((n) => <SelectItem key={n} value={String(n)}>{n} / page</SelectItem>)}
+            </SelectContent>
+          </Select>
+          <Select value={sort} onValueChange={(v) => setSort(v as typeof sort)}>
+            <SelectTrigger className="w-40 rounded-xl gap-1">
+              <ArrowUpDown className="size-3.5 shrink-0 text-muted-foreground" />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="newest">Newest</SelectItem>
+              <SelectItem value="oldest">Oldest</SelectItem>
+              <SelectItem value="top_voted">Top voted</SelectItem>
+              <SelectItem value="status">Status</SelectItem>
             </SelectContent>
           </Select>
         </div>
