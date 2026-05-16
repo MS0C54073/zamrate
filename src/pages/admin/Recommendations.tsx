@@ -91,7 +91,7 @@ export default function AdminRecommendations() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return items.filter((r) => {
+    let list = items.filter((r) => {
       if (filter !== "all" && r.status !== filter) return false;
       if (!q) return true;
       return (
@@ -102,7 +102,21 @@ export default function AdminRecommendations() {
         (r.admin_response?.toLowerCase().includes(q) ?? false)
       );
     });
-  }, [items, filter, query]);
+    switch (sort) {
+      case "oldest":
+        list.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+        break;
+      case "top_voted":
+        list.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes));
+        break;
+      case "status":
+        list.sort((a, b) => a.status.localeCompare(b.status) || new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        break;
+      default: // newest
+        list.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    }
+    return list;
+  }, [items, filter, query, sort]);
 
   useEffect(() => { setPage(1); }, [query, filter, pageSize]);
 
