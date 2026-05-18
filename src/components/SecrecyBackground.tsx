@@ -80,24 +80,24 @@ export function SecrecyBackground() {
   return (
     <div
       aria-hidden
-      className="hidden dark:block pointer-events-none fixed inset-0 -z-10 overflow-hidden"
+      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
     >
-      {/* Hooded silhouette image */}
+      {/* Colorful neon theme image */}
       <div
-        className="absolute inset-0 bg-center bg-cover opacity-[0.10] blur-[3px] animate-secrecy-pulse"
+        className="absolute inset-0 bg-center bg-cover opacity-[0.18] dark:opacity-[0.28] animate-secrecy-pulse"
         style={{ backgroundImage: `url(${bg})` }}
       />
       {/* Color wash to keep design system harmony + boost contrast for foreground UI */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/80 to-background" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/85 to-background" />
 
-      {/* Matrix code rain — dimmed so text stays readable */}
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-25" />
+      {/* Matrix code rain — dark mode only, dimmed so text stays readable */}
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-0 dark:opacity-25" />
 
       {/* Scanning line */}
-      <div className="absolute inset-x-0 h-[2px] bg-primary/30 blur-[2px] animate-secrecy-scan" />
+      <div className="absolute inset-x-0 h-[2px] bg-primary/40 blur-[2px] animate-secrecy-scan" />
 
       {/* Vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,hsl(var(--background))_95%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,hsl(var(--background))_95%)]" />
     </div>
   );
 }
