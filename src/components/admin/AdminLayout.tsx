@@ -35,9 +35,7 @@ function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarContent>
         <div className={`px-3 py-4 flex items-center gap-2 ${collapsed ? "justify-center" : ""}`}>
-          <div className="size-9 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shrink-0">
-            <Shield className="size-4" />
-          </div>
+          <img src="/favicon.png" alt="ZamRate" className="size-9 rounded-xl object-cover shrink-0 shadow-card" />
           {!collapsed && <div className="font-display text-lg leading-tight">ZamRate<br/><span className="text-xs uppercase tracking-widest text-muted-foreground font-bold">Admin</span></div>}
         </div>
 
