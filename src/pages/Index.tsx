@@ -75,8 +75,8 @@ export default function Index() {
       <header className="sticky top-0 z-40 bg-background/85 backdrop-blur-md border-b border-accent/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
           <a href="#" className="flex items-center gap-2 shrink-0">
-            <div className="size-10 bg-primary rounded-full flex items-center justify-center font-display text-primary-foreground text-xl">Z</div>
-            <span className="font-display text-xl text-clay hidden sm:inline">ZamRate</span>
+            <img src={zamrateIcon} alt="ZamRate" className="size-10 rounded-xl object-cover shadow-card" />
+            <span className="font-display text-xl text-foreground hidden sm:inline">ZamRate</span>
           </a>
           <div className="flex-1 max-w-2xl relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
