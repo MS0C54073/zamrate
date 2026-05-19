@@ -1,0 +1,18 @@
+CREATE INDEX IF NOT EXISTS idx_ratings_company_id ON public.ratings(company_id);
+CREATE INDEX IF NOT EXISTS idx_ratings_anon ON public.ratings(anonymous_user_id);
+CREATE INDEX IF NOT EXISTS idx_comments_company_id ON public.comments(company_id);
+CREATE INDEX IF NOT EXISTS idx_comments_anon ON public.comments(anonymous_user_id);
+CREATE INDEX IF NOT EXISTS idx_comments_status_created ON public.comments(status, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_comments_parent ON public.comments(parent_comment_id);
+CREATE INDEX IF NOT EXISTS idx_reports_comment ON public.reported_comments(comment_id);
+CREATE INDEX IF NOT EXISTS idx_reports_status ON public.reported_comments(status);
+CREATE INDEX IF NOT EXISTS idx_recommendations_status ON public.recommendations(status) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_recommendations_created ON public.recommendations(created_at DESC) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_rec_votes_rec ON public.recommendation_votes(recommendation_id);
+CREATE INDEX IF NOT EXISTS idx_rec_votes_anon ON public.recommendation_votes(anonymous_user_id);
+CREATE INDEX IF NOT EXISTS idx_companies_status_name ON public.companies(status, name);
+CREATE INDEX IF NOT EXISTS idx_companies_category ON public.companies(category);
+CREATE INDEX IF NOT EXISTS idx_suggestions_status ON public.company_suggestions(status, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_user_roles_user ON public.user_roles(user_id);
+CREATE INDEX IF NOT EXISTS idx_blocked_users_anon_status ON public.blocked_users(anonymous_user_id, status);
+CREATE INDEX IF NOT EXISTS idx_audit_admin_created ON public.admin_audit_logs(admin_id, created_at DESC);

@@ -7,6 +7,7 @@ import {
   ScrollText, Settings, LogOut, Shield, Menu,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
   SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger,
@@ -114,6 +115,7 @@ export default function AdminLayout() {
                 Signed in as <span className="font-semibold text-foreground">{session.user.email}</span> · <span className="uppercase tracking-widest">{primaryRole.replace("_", " ")}</span>
               </p>
             </div>
+            <ThemeToggle />
             <Button onClick={signOut} variant="outline" size="sm" className="rounded-xl gap-1">
               <LogOut className="size-4" /> Sign out
             </Button>
