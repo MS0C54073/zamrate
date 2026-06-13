@@ -87,7 +87,7 @@
     --ring: 185 95% 55%;
 
     --shadow-card: 0 4px 24px hsl(0 0% 0% / 0.5), 0 1px 3px hsl(0 0% 0% / 0.35);
-    --shadow-card-hover: 0 12px 40px hsl(320 90% 65% / 0.25), 0 4px 12px hsl(185 95% 55% / 0.18);
+    --shadow-card-hover: 0 12px 40px hsl(38 95% 60% / 0.28), 0 4px 12px hsl(185 95% 55% / 0.18);
 
     --sidebar-background: 235 40% 9%;
     --sidebar-foreground: 220 25% 95%;
