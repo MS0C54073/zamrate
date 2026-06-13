@@ -203,6 +203,27 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limit_events: {
+        Row: {
+          action: string
+          anonymous_user_id: string
+          created_at: string
+          id: number
+        }
+        Insert: {
+          action: string
+          anonymous_user_id: string
+          created_at?: string
+          id?: number
+        }
+        Update: {
+          action?: string
+          anonymous_user_id?: string
+          created_at?: string
+          id?: number
+        }
+        Relationships: []
+      }
       ratings: {
         Row: {
           anonymous_user_id: string
@@ -388,6 +409,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_and_log_rate_limit: {
+        Args: {
+          _action: string
+          _anon_id: string
+          _max: number
+          _window_seconds: number
+        }
+        Returns: boolean
+      }
+      cleanup_rate_limit_events: { Args: never; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
