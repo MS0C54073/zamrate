@@ -99,6 +99,13 @@ export function CompanyDetailDialog({ company, open, onOpenChange, onRatingChang
     setComments(cs ?? []);
   }
 
+  function describeError(message: string): string {
+    if (/rate limit exceeded/i.test(message)) {
+      return "You're going a little fast. Please wait a moment and try again.";
+    }
+    return message;
+  }
+
   async function submitRating() {
     if (!company || !pickedRating) return;
     if (myRatingId) {
@@ -108,14 +115,14 @@ export function CompanyDetailDialog({ company, open, onOpenChange, onRatingChang
         return;
       }
       const { error } = await supabase.from("ratings").update({ rating: pickedRating }).eq("id", myRatingId);
-      if (error) return toast.error(error.message);
+      if (error) return toast.error(describeError(error.message));
       const remaining = 3 - (myChangeCount + 1);
       toast.success(remaining > 0 ? `Rating updated. ${remaining} change${remaining === 1 ? "" : "s"} remaining.` : "Rating updated. Now locked.");
     } else {
       const { error } = await supabase.from("ratings").insert({
         company_id: company.id, anonymous_user_id: anonId, rating: pickedRating,
       });
-      if (error) return toast.error(error.message);
+      if (error) return toast.error(describeError(error.message));
       toast.success("Thank you! Your rating has been recorded.");
     }
     await loadAll();
@@ -130,7 +137,7 @@ export function CompanyDetailDialog({ company, open, onOpenChange, onRatingChang
       parent_comment_id: parent,
       comment_text: text.trim(),
     });
-    if (error) return toast.error(error.message);
+    if (error) return toast.error(describeError(error.message));
     if (parent) { setReplyText(""); setReplyTo(null); } else { setNewComment(""); }
     toast.success("Posted!");
     await loadAll();
