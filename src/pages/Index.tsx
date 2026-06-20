@@ -1,14 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Search, Shield, Users, BarChart3, Flag, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Search, Shield, Users, BarChart3, Flag,
+  ChevronLeft, ChevronRight, Globe, Bell, ChevronDown,
+} from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { CATEGORIES, ALL_CATEGORY } from "@/lib/categories";
 import { CompanyCard } from "@/components/CompanyCard";
 import { CompanyDetailDialog } from "@/components/CompanyDetailDialog";
 import { SuggestCompanyDialog } from "@/components/SuggestCompanyDialog";
 import zamrateIcon from "@/assets/zamrate-icon.png";
+import heroIllustration from "@/assets/hero-zambia.jpg";
 import type { Company } from "@/types";
 import { LiveActivity } from "@/components/LiveActivity";
 
@@ -89,140 +92,142 @@ export default function Index() {
   return (
     <div className="min-h-dvh bg-background text-foreground">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-background/90 backdrop-blur-md border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-4">
-          <a href="#" className="flex items-center gap-2 shrink-0">
+      <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border">
+        <div className="max-w-[1400px] mx-auto px-6 py-3 flex items-center gap-6">
+          <a href="#" className="flex items-center gap-2.5 shrink-0">
             <img src={zamrateIcon} alt="ZamRate" className="size-10 rounded-xl object-cover" />
-            <span className="font-display text-xl font-bold">
+            <span className="font-display text-2xl font-extrabold tracking-tight">
               Zam<span className="text-primary">Rate</span>
             </span>
           </a>
-          <div className="flex-1 max-w-2xl relative mx-2">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+          <div className="flex-1 max-w-2xl relative">
+            <Globe className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search for companies, categories or keywords…"
-              className="pl-11 bg-secondary/60 border-border focus-visible:bg-card focus-visible:border-primary rounded-full h-11"
+              className="pl-11 pr-16 bg-secondary/70 border-transparent focus-visible:bg-card focus-visible:border-primary rounded-full h-11 text-sm"
             />
+            <kbd className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 items-center gap-1 px-2 py-0.5 rounded-md border border-border bg-card text-[11px] text-muted-foreground font-mono">
+              ⌘K
+            </kbd>
           </div>
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-foreground/80">
-            <a href="#explore" className="hover:text-primary">Explore</a>
+          <nav className="hidden lg:flex items-center gap-7 text-sm font-medium text-foreground/80">
+            <a href="#explore" className="hover:text-primary flex items-center gap-1">
+              Explore <ChevronDown className="size-3.5" />
+            </a>
             <a href="#about" className="hover:text-primary">About</a>
-            <a href="#trust" className="hover:text-primary">Trust</a>
+            <a href="#trust" className="hover:text-primary">For Businesses</a>
           </nav>
-          <div className="flex items-center gap-2">
+          <button
+            className="size-10 rounded-full hover:bg-secondary flex items-center justify-center text-foreground/70"
+            aria-label="Notifications"
+          >
+            <Bell className="size-5" />
+          </button>
+          <div className="flex items-center gap-1">
+            <div className="size-10 rounded-full bg-foreground text-background flex items-center justify-center font-bold text-xs">
+              AN
+            </div>
             <ThemeToggle />
-            <SuggestCompanyDialog />
           </div>
+          <SuggestCompanyDialog />
         </div>
       </header>
 
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border">
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-background"
-        />
-        <div
-          aria-hidden
-          className="absolute right-0 top-0 bottom-0 w-1/2 bg-[radial-gradient(circle_at_70%_50%,hsl(var(--primary)/0.12),transparent_60%)]"
-        />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20 grid lg:grid-cols-[1.4fr_1fr] gap-10 items-center">
+      <section className="relative overflow-hidden">
+        <div className="max-w-[1400px] mx-auto px-6 pt-12 pb-10 grid lg:grid-cols-[1.2fr_1fr] gap-8 items-center">
           <div>
-            <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[1.02] font-bold tracking-tight">
+            <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[1.02] font-extrabold tracking-tight text-foreground">
               The People&apos;s Pulse:{" "}
               <span className="text-primary">Zambia</span>
             </h1>
-            <p className="mt-5 text-lg text-foreground/65 max-w-xl">
+            <p className="mt-5 text-xl text-foreground/65">
               Real reviews. Real experiences. Real impact.
             </p>
-            <div className="mt-7 inline-flex items-center gap-3 bg-card/70 border border-border rounded-full pl-3 pr-5 py-2 shadow-card">
-              <div className="size-8 rounded-full bg-primary/10 text-primary flex items-center justify-center">
-                <Shield className="size-4" />
+            <div className="mt-7 inline-flex items-center gap-3">
+              <div className="size-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+                <Shield className="size-5" />
               </div>
-              <p className="text-sm">
+              <p className="text-base">
                 <span className="font-semibold">Privacy-First:</span>{" "}
                 <span className="text-muted-foreground">No Tracking, No Personal Data.</span>
               </p>
             </div>
           </div>
-          <div className="relative hidden lg:flex items-center justify-center">
-            <div className="relative aspect-[5/4] w-full max-w-md">
-              {/* Stylized Zambian flag block */}
-              <div className="absolute inset-y-6 right-8 w-44 rounded-xl overflow-hidden shadow-card-hover border border-border rotate-[3deg]">
-                <div className="h-3/5 bg-[#198a00]" />
-                <div className="h-1/5 bg-[#de2010]" />
-                <div className="h-[10%] bg-foreground" />
-                <div className="h-[10%] bg-[#ef7d00]" />
-              </div>
-              <div className="absolute inset-y-10 left-6 right-32 rounded-2xl bg-gradient-to-br from-primary/15 to-transparent border border-primary/20 backdrop-blur-sm" />
-              <Flag className="absolute bottom-4 left-10 size-10 text-primary" />
-            </div>
+          <div className="relative hidden lg:block">
+            <img
+              src={heroIllustration}
+              alt="Zambian skyline with flag"
+              width={1024}
+              height={650}
+              className="w-full h-auto object-contain max-h-[320px]"
+            />
           </div>
         </div>
-      </section>
 
-      {/* Category strip */}
-      <section id="explore" className="border-b border-border bg-card/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex items-center gap-3">
-          <button
-            onClick={() => scrollCats(-1)}
-            className="size-10 rounded-full bg-card border border-border hover:border-primary hover:text-primary flex items-center justify-center shrink-0"
-            aria-label="Scroll categories left"
-          >
-            <ChevronLeft className="size-5" />
-          </button>
-          <div
-            ref={catRowRef}
-            className="flex-1 flex gap-3 overflow-x-auto scroll-smooth no-scrollbar"
-            style={{ scrollbarWidth: "none" }}
-          >
-            {[ALL_CATEGORY, ...CATEGORIES].map((c) => {
-              const active = activeCategory === c.name;
-              const Icon = c.icon;
-              const count =
-                c.name === ALL_CATEGORY.name
-                  ? companies.length
-                  : (categoryCounts[c.name] ?? 0);
-              return (
-                <button
-                  key={c.name}
-                  onClick={() => setActiveCategory(c.name)}
-                  className={`shrink-0 flex items-center gap-3 px-5 py-3 rounded-xl border transition-all ${
-                    active
-                      ? "bg-primary/10 border-primary text-primary"
-                      : "bg-card border-border hover:border-primary/40"
-                  }`}
-                >
-                  <Icon className={`size-6 ${active ? "text-primary" : "text-foreground/70"}`} />
-                  <div className="text-left">
-                    <div className="font-semibold text-sm leading-tight whitespace-nowrap">
-                      {c.name.replace(" and ", " & ")}
+        {/* Category strip — overlapping card */}
+        <div id="explore" className="max-w-[1400px] mx-auto px-6 -mb-6 relative z-10">
+          <div className="bg-card rounded-2xl shadow-card border border-border/60 p-3 flex items-center gap-2">
+            <button
+              onClick={() => scrollCats(-1)}
+              className="size-10 rounded-full bg-card border border-border hover:border-primary hover:text-primary flex items-center justify-center shrink-0"
+              aria-label="Scroll categories left"
+            >
+              <ChevronLeft className="size-5" />
+            </button>
+            <div
+              ref={catRowRef}
+              className="flex-1 flex gap-2 overflow-x-auto scroll-smooth no-scrollbar"
+              style={{ scrollbarWidth: "none" }}
+            >
+              {[ALL_CATEGORY, ...CATEGORIES].map((c) => {
+                const active = activeCategory === c.name;
+                const Icon = c.icon;
+                const count =
+                  c.name === ALL_CATEGORY.name
+                    ? companies.length
+                    : (categoryCounts[c.name] ?? 0);
+                return (
+                  <button
+                    key={c.name}
+                    onClick={() => setActiveCategory(c.name)}
+                    className={`shrink-0 flex items-center gap-3 px-5 py-3 rounded-xl transition-all ${
+                      active
+                        ? "bg-primary/10 text-primary"
+                        : "hover:bg-secondary/60 text-foreground"
+                    }`}
+                  >
+                    <Icon className={`size-7 ${active ? "text-primary" : "text-primary/80"}`} strokeWidth={1.75} />
+                    <div className="text-left">
+                      <div className="font-bold text-sm leading-tight whitespace-nowrap">
+                        {c.short}
+                      </div>
+                      <div className="text-xs text-muted-foreground tabular-nums">
+                        {count} {count === 1 ? "company" : "companies"}
+                      </div>
                     </div>
-                    <div className="text-xs text-muted-foreground tabular-nums">
-                      {count} {count === 1 ? "company" : "companies"}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
+                  </button>
+                );
+              })}
+            </div>
+            <button
+              onClick={() => scrollCats(1)}
+              className="size-10 rounded-full bg-card border border-border hover:border-primary hover:text-primary flex items-center justify-center shrink-0"
+              aria-label="Scroll categories right"
+            >
+              <ChevronRight className="size-5" />
+            </button>
           </div>
-          <button
-            onClick={() => scrollCats(1)}
-            className="size-10 rounded-full bg-card border border-border hover:border-primary hover:text-primary flex items-center justify-center shrink-0"
-            aria-label="Scroll categories right"
-          >
-            <ChevronRight className="size-5" />
-          </button>
         </div>
       </section>
 
       {/* Main: top rated + live activity */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid lg:grid-cols-[1fr_320px] gap-8">
+      <main className="max-w-[1400px] mx-auto px-6 pt-14 pb-10 grid lg:grid-cols-[1fr_340px] gap-8">
         <section>
           <div className="flex items-end justify-between mb-5">
-            <h2 className="font-display text-2xl sm:text-3xl font-bold">
+            <h2 className="font-display text-3xl font-extrabold tracking-tight">
               {activeCategory === ALL_CATEGORY.name ? "Top Rated Companies" : activeCategory}
             </h2>
             <button
@@ -253,10 +258,9 @@ export default function Index() {
             </div>
           )}
 
-          {/* All companies (full filtered list) */}
           {filtered.length > topRated.length && (
             <div id="all-companies" className="mt-14">
-              <h2 className="font-display text-2xl sm:text-3xl font-bold mb-5">All Companies</h2>
+              <h2 className="font-display text-2xl sm:text-3xl font-extrabold mb-5">All Companies</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
                 {filtered.map((c) => {
                   const a = agg[c.id];
@@ -280,19 +284,19 @@ export default function Index() {
       </main>
 
       {/* Trust strip */}
-      <section id="trust" className="border-t border-border bg-card/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 grid grid-cols-2 md:grid-cols-4 gap-6">
-          <TrustItem icon={<Users className="size-5" />} title="Citizen-Driven" text="By the people, for the people." />
-          <TrustItem icon={<Shield className="size-5" />} title="100% Anonymous" text="Your voice, your privacy." />
+      <section id="trust" className="max-w-[1400px] mx-auto px-6 pb-12">
+        <div className="bg-card rounded-2xl border border-border/60 shadow-card p-6 grid grid-cols-2 md:grid-cols-4 gap-6">
+          <TrustItem icon={<Shield className="size-5" />} title="Citizen-Driven" text="By the people, for the people." />
+          <TrustItem icon={<Users className="size-5" />} title="100% Anonymous" text="Your voice, your privacy." />
           <TrustItem icon={<BarChart3 className="size-5" />} title="Real Impact" text="Ratings that drive better services." />
           <TrustItem icon={<Flag className="size-5" />} title="Zambia First" text="Proudly built for Zambia." />
         </div>
       </section>
 
-      <footer className="bg-foreground text-background py-10 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-6">
+      <footer className="bg-foreground text-background py-10 px-6">
+        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-start gap-6">
           <div className="max-w-xs">
-            <div className="font-display text-2xl font-bold mb-2">
+            <div className="font-display text-2xl font-extrabold mb-2">
               Zam<span className="text-primary">Rate</span>
             </div>
             <p className="text-background/60 text-sm">
@@ -322,7 +326,7 @@ function TrustItem({ icon, title, text }: { icon: React.ReactNode; title: string
         {icon}
       </div>
       <div>
-        <div className="font-semibold text-sm">{title}</div>
+        <div className="font-bold text-sm">{title}</div>
         <div className="text-xs text-muted-foreground">{text}</div>
       </div>
     </div>
