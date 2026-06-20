@@ -11,48 +11,38 @@ interface Props {
   onRate: (c: Company) => void;
 }
 
+function initials(name: string) {
+  return name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
+}
+
 export function CompanyCard({ company, avg, count, onView, onRate }: Props) {
   const Icon = iconFor(company.category);
   return (
-    <article className="bg-card rounded-3xl p-6 sm:p-7 shadow-card border border-border/60 flex flex-col hover:shadow-card-hover transition-all">
-      <div className="flex justify-between items-start mb-5">
-        <div className="size-14 bg-secondary rounded-2xl flex items-center justify-center text-clay">
-          <Icon className="size-7" />
-        </div>
-        <div className="bg-accent/20 px-3 py-1 rounded-full flex items-center gap-1.5">
-          <span className="text-clay font-bold tabular-nums text-sm">
-            {avg ? avg.toFixed(1) : "—"}
+    <article className="bg-card rounded-2xl p-5 shadow-card border border-border/60 flex flex-col hover:shadow-card-hover hover:-translate-y-0.5 transition-all">
+      <button onClick={() => onView(company)} className="flex flex-col items-center text-center group">
+        <div className="size-16 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/15 flex items-center justify-center mb-3 relative">
+          <span className="font-display font-bold text-primary text-lg">{initials(company.name)}</span>
+          <span className="absolute -bottom-1.5 -right-1.5 size-7 rounded-full bg-card border border-border flex items-center justify-center text-primary">
+            <Icon className="size-3.5" />
           </span>
-          <span className="text-xs text-clay/70">/ 5</span>
         </div>
+        <h3 className="font-display text-base font-semibold leading-tight group-hover:text-primary transition-colors">
+          {company.name}
+        </h3>
+      </button>
+
+      <div className="flex items-center justify-center gap-1.5 mt-3 mb-4">
+        <StarRating value={avg} readOnly size={14} />
+        <span className="text-sm font-semibold tabular-nums">{avg ? avg.toFixed(1) : "—"}</span>
+        <span className="text-xs text-muted-foreground">({count})</span>
       </div>
 
-      <div className="mb-3">
-        <span className="text-[10px] font-bold uppercase tracking-widest text-primary">
-          {company.category}
-        </span>
-        <h3 className="font-display text-xl sm:text-2xl mt-1 leading-tight">{company.name}</h3>
-      </div>
-
-      <p className="text-foreground/60 text-sm leading-relaxed mb-5 line-clamp-2">
-        {company.description || company.services}
-      </p>
-
-      <div className="flex items-center gap-2 mb-5">
-        <StarRating value={avg} readOnly size={16} />
-        <span className="text-xs text-muted-foreground">
-          {count} {count === 1 ? "rating" : "ratings"}
-        </span>
-      </div>
-
-      <div className="mt-auto flex gap-2">
-        <Button variant="secondary" className="flex-1 rounded-xl" onClick={() => onView(company)}>
-          View Details
-        </Button>
-        <Button className="flex-1 rounded-xl bg-primary hover:bg-clay text-primary-foreground" onClick={() => onRate(company)}>
-          Rate Now
-        </Button>
-      </div>
+      <Button
+        className="w-full rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground mt-auto h-9"
+        onClick={() => onRate(company)}
+      >
+        Rate Now
+      </Button>
     </article>
   );
 }
