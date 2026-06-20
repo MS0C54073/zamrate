@@ -34,7 +34,7 @@ export const StarRating = forwardRef<HTMLDivElement, Props>(function StarRating(
             <Star
               size={size}
               className={cn(
-                filled ? "fill-accent stroke-accent" : "stroke-muted-foreground/40 fill-transparent"
+                filled ? "fill-gold stroke-gold" : "stroke-muted-foreground/40 fill-transparent"
               )}
             />
           </button>
