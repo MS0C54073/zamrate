@@ -51,6 +51,7 @@ export default {
           DEFAULT: "hsl(var(--clay))",
           foreground: "hsl(var(--clay-foreground))",
         },
+        gold: "hsl(var(--gold))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
