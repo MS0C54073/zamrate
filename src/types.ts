@@ -6,7 +6,10 @@ export interface Company {
   services: string | null;
   location: string | null;
   website: string | null;
-  phone: string | null;
+  /** Public anonymous queries cannot read this column. */
+  phone?: string | null;
+  /** Public anonymous queries cannot read this column. */
+  email?: string | null;
 }
 
 export interface CommentRow {
@@ -15,5 +18,6 @@ export interface CommentRow {
   parent_comment_id: string | null;
   comment_text: string;
   created_at: string;
-  anonymous_user_id: string;
+  /** Public anonymous queries cannot read this column. */
+  anonymous_user_id?: string;
 }
