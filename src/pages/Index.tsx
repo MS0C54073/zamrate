@@ -11,7 +11,8 @@ import { CompanyCard } from "@/components/CompanyCard";
 import { CompanyDetailDialog } from "@/components/CompanyDetailDialog";
 import { SuggestCompanyDialog } from "@/components/SuggestCompanyDialog";
 import zamrateIcon from "@/assets/zamrate-icon.png";
-import zambiaFlag from "@/assets/zambia-flag.png.asset.json";
+import zambiaFlag from "@/assets/zambia-flag-real.png.asset.json";
+import lusakaSkyline from "@/assets/lusaka-skyline.jpg";
 import type { Company } from "@/types";
 import { LiveActivity } from "@/components/LiveActivity";
 
@@ -137,13 +138,32 @@ export default function Index() {
 
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="max-w-[1400px] mx-auto px-6 pt-12 pb-10 grid lg:grid-cols-[1.2fr_1fr] gap-8 items-center">
-          <div>
+        {/* Background: skyline + flag, faded behind content */}
+        <div aria-hidden className="absolute inset-0 pointer-events-none">
+          <img
+            src={lusakaSkyline}
+            alt=""
+            width={1920}
+            height={640}
+            className="absolute right-0 top-0 h-full w-[70%] object-cover object-bottom opacity-60 dark:opacity-25"
+          />
+          <img
+            src={zambiaFlag.url}
+            alt=""
+            className="absolute right-6 top-6 w-[360px] max-w-[42%] h-auto rounded-md shadow-2xl ring-1 ring-black/10 rotate-[-3deg] opacity-90 dark:opacity-80"
+          />
+          {/* Left-to-right fade so text stays readable */}
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-background" />
+        </div>
+
+        <div className="relative max-w-[1400px] mx-auto px-6 pt-16 pb-14 min-h-[360px]">
+          <div className="max-w-2xl">
             <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[1.02] font-extrabold tracking-tight text-foreground">
               The People&apos;s Pulse:{" "}
               <span className="text-primary">Zambia</span>
             </h1>
-            <p className="mt-5 text-xl text-foreground/65">
+            <p className="mt-5 text-xl text-foreground/70">
               Real reviews. Real experiences. Real impact.
             </p>
             <div className="mt-7 inline-flex items-center gap-3">
@@ -155,14 +175,6 @@ export default function Index() {
                 <span className="text-muted-foreground">No Tracking, No Personal Data.</span>
               </p>
             </div>
-          </div>
-          <div className="relative hidden lg:flex items-center justify-end min-h-[280px]">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent rounded-3xl" />
-            <img
-              src={zambiaFlag.url}
-              alt="Flag of Zambia"
-              className="relative w-[420px] max-w-full h-auto rounded-md shadow-2xl ring-1 ring-black/10 rotate-[-2deg]"
-            />
           </div>
         </div>
 
