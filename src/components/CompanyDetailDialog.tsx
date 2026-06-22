@@ -77,14 +77,25 @@ export function CompanyDetailDialog({ company, open, onOpenChange, onRatingChang
 
   async function loadAll() {
     if (!company) return;
-    const [{ data: ratings }, { data: cs }] = await Promise.all([
-      supabase.from("ratings").select("id, rating, rating_change_count, anonymous_user_id").eq("company_id", company.id),
-      supabase.from("comments").select("id, company_id, parent_comment_id, comment_text, created_at, anonymous_user_id").eq("company_id", company.id).order("created_at", { ascending: true }),
+    const [{ data: ratings }, { data: mineRows }, { data: cs }] = await Promise.all([
+      supabase.from("ratings").select("id, rating").eq("company_id", company.id),
+      supabase
+        .from("ratings")
+        .select("id, rating, rating_change_count")
+        .eq("company_id", company.id)
+        .eq("anonymous_user_id", anonId)
+        .maybeSingle()
+        .then((res) => ({ data: res.data ? [res.data] : [] })),
+      supabase
+        .from("comments")
+        .select("id, company_id, parent_comment_id, comment_text, created_at")
+        .eq("company_id", company.id)
+        .order("created_at", { ascending: true }),
     ]);
     const rs = ratings ?? [];
     setCount(rs.length);
     setAvg(rs.length ? rs.reduce((a, r) => a + r.rating, 0) / rs.length : 0);
-    const mine = rs.find((r) => r.anonymous_user_id === anonId);
+    const mine = (mineRows ?? [])[0];
     if (mine) {
       setMyRating(mine.rating);
       setMyChangeCount(mine.rating_change_count);

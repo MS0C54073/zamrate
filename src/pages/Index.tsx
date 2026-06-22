@@ -38,7 +38,7 @@ export default function Index() {
 
   async function load() {
     const [{ data: cs }, { data: rs }] = await Promise.all([
-      supabase.from("companies").select("*").order("name"),
+      supabase.from("companies").select("id, name, category, description, services, location, website, status, created_at, logo_url, updated_at").order("name"),
       supabase.from("ratings").select("company_id, rating"),
     ]);
     setCompanies((cs ?? []) as Company[]);
