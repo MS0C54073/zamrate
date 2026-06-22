@@ -12,6 +12,7 @@ import { CompanyDetailDialog } from "@/components/CompanyDetailDialog";
 import { SuggestCompanyDialog } from "@/components/SuggestCompanyDialog";
 import zamrateIcon from "@/assets/zamrate-icon.png";
 import heroIllustration from "@/assets/hero-zambia.jpg";
+import zambiaFlag from "@/assets/zambia-flag.png.asset.json";
 import type { Company } from "@/types";
 import { LiveActivity } from "@/components/LiveActivity";
 
@@ -159,10 +160,15 @@ export default function Index() {
           <div className="relative hidden lg:block">
             <img
               src={heroIllustration}
-              alt="Zambian skyline with flag"
+              alt="Zambian skyline"
               width={1024}
               height={650}
-              className="w-full h-auto object-contain max-h-[320px]"
+              className="w-full h-auto object-contain max-h-[320px] opacity-90"
+            />
+            <img
+              src={zambiaFlag.url}
+              alt="Flag of Zambia"
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-56 h-auto rounded-md shadow-2xl ring-1 ring-black/10 rotate-[2deg]"
             />
           </div>
         </div>
