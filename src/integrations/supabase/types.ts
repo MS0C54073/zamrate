@@ -598,15 +598,6 @@ export type Database = {
         Returns: boolean
       }
       cleanup_rate_limit_events: { Args: never; Returns: undefined }
-      has_role: {
-        Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
-        Returns: boolean
-      }
-      is_admin_tier: { Args: { _user_id: string }; Returns: boolean }
-      is_blocked: { Args: { _anon_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user" | "super_admin" | "sub_admin"
