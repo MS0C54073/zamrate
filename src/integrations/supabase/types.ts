@@ -114,24 +114,10 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "comments_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "public_companies"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "comments_parent_comment_id_fkey"
             columns: ["parent_comment_id"]
             isOneToOne: false
             referencedRelation: "comments"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_parent_comment_id_fkey"
-            columns: ["parent_comment_id"]
-            isOneToOne: false
-            referencedRelation: "public_comments"
             referencedColumns: ["id"]
           },
         ]
@@ -274,13 +260,6 @@ export type Database = {
             referencedRelation: "companies"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "ratings_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "public_companies"
-            referencedColumns: ["id"]
-          },
         ]
       }
       recommendation_votes: {
@@ -402,13 +381,6 @@ export type Database = {
             referencedRelation: "comments"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "reported_comments_comment_id_fkey"
-            columns: ["comment_id"]
-            isOneToOne: false
-            referencedRelation: "public_comments"
-            referencedColumns: ["id"]
-          },
         ]
       }
       user_roles: {
@@ -434,158 +406,7 @@ export type Database = {
       }
     }
     Views: {
-      public_comments: {
-        Row: {
-          author_hash: string | null
-          comment_text: string | null
-          company_id: string | null
-          created_at: string | null
-          deleted_at: string | null
-          id: string | null
-          parent_comment_id: string | null
-          report_count: number | null
-          status: string | null
-        }
-        Insert: {
-          author_hash?: never
-          comment_text?: string | null
-          company_id?: string | null
-          created_at?: string | null
-          deleted_at?: string | null
-          id?: string | null
-          parent_comment_id?: string | null
-          report_count?: number | null
-          status?: string | null
-        }
-        Update: {
-          author_hash?: never
-          comment_text?: string | null
-          company_id?: string | null
-          created_at?: string | null
-          deleted_at?: string | null
-          id?: string | null
-          parent_comment_id?: string | null
-          report_count?: number | null
-          status?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "comments_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "public_companies"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_parent_comment_id_fkey"
-            columns: ["parent_comment_id"]
-            isOneToOne: false
-            referencedRelation: "comments"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_parent_comment_id_fkey"
-            columns: ["parent_comment_id"]
-            isOneToOne: false
-            referencedRelation: "public_comments"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      public_companies: {
-        Row: {
-          category: string | null
-          created_at: string | null
-          description: string | null
-          id: string | null
-          location: string | null
-          logo_url: string | null
-          name: string | null
-          services: string | null
-          status: string | null
-          updated_at: string | null
-          website: string | null
-        }
-        Insert: {
-          category?: string | null
-          created_at?: string | null
-          description?: string | null
-          id?: string | null
-          location?: string | null
-          logo_url?: string | null
-          name?: string | null
-          services?: string | null
-          status?: string | null
-          updated_at?: string | null
-          website?: string | null
-        }
-        Update: {
-          category?: string | null
-          created_at?: string | null
-          description?: string | null
-          id?: string | null
-          location?: string | null
-          logo_url?: string | null
-          name?: string | null
-          services?: string | null
-          status?: string | null
-          updated_at?: string | null
-          website?: string | null
-        }
-        Relationships: []
-      }
-      public_ratings: {
-        Row: {
-          author_hash: string | null
-          company_id: string | null
-          created_at: string | null
-          id: string | null
-          rating: number | null
-          rating_change_count: number | null
-          updated_at: string | null
-        }
-        Insert: {
-          author_hash?: never
-          company_id?: string | null
-          created_at?: string | null
-          id?: string | null
-          rating?: number | null
-          rating_change_count?: number | null
-          updated_at?: string | null
-        }
-        Update: {
-          author_hash?: never
-          company_id?: string | null
-          created_at?: string | null
-          id?: string | null
-          rating?: number | null
-          rating_change_count?: number | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "ratings_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "ratings_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "public_companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
+      [_ in never]: never
     }
     Functions: {
       check_and_log_rate_limit: {
