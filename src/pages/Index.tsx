@@ -11,7 +11,6 @@ import { CompanyCard } from "@/components/CompanyCard";
 import { CompanyDetailDialog } from "@/components/CompanyDetailDialog";
 import { SuggestCompanyDialog } from "@/components/SuggestCompanyDialog";
 import zamrateIcon from "@/assets/zamrate-icon.png";
-import heroIllustration from "@/assets/hero-zambia.jpg";
 import zambiaFlag from "@/assets/zambia-flag.png.asset.json";
 import type { Company } from "@/types";
 import { LiveActivity } from "@/components/LiveActivity";
@@ -157,18 +156,12 @@ export default function Index() {
               </p>
             </div>
           </div>
-          <div className="relative hidden lg:block">
-            <img
-              src={heroIllustration}
-              alt="Zambian skyline"
-              width={1024}
-              height={650}
-              className="w-full h-auto object-contain max-h-[320px] opacity-90"
-            />
+          <div className="relative hidden lg:flex items-center justify-end min-h-[280px]">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent rounded-3xl" />
             <img
               src={zambiaFlag.url}
               alt="Flag of Zambia"
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-56 h-auto rounded-md shadow-2xl ring-1 ring-black/10 rotate-[2deg]"
+              className="relative w-[420px] max-w-full h-auto rounded-md shadow-2xl ring-1 ring-black/10 rotate-[-2deg]"
             />
           </div>
         </div>
