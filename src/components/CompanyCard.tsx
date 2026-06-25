@@ -117,12 +117,22 @@ function logoDomain(company: Company): string | null {
   return KNOWN_DOMAINS[key] ?? domainFromWebsite(company.website);
 }
 
+function logoSources(domain: string): string[] {
+  // Try multiple favicon services in order — different ones index different .zm domains.
+  return [
+    `https://icons.duckduckgo.com/ip3/${domain}.ico`,
+    `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
+    `https://icon.horse/icon/${domain}`,
+  ];
+}
+
 export function CompanyCard({ company, avg, count, onView, onRate }: Props) {
   const Icon = iconFor(company.category);
   const domain = logoDomain(company);
-  const logoUrl = domain ? `https://www.google.com/s2/favicons?domain=${domain}&sz=128` : null;
-  const [logoFailed, setLogoFailed] = useState(false);
-  const showLogo = !!logoUrl && !logoFailed;
+  const sources = domain ? logoSources(domain) : [];
+  const [srcIdx, setSrcIdx] = useState(0);
+  const logoUrl = sources[srcIdx] ?? null;
+  const showLogo = !!logoUrl;
   return (
     <article className="bg-card rounded-2xl p-5 shadow-card border border-border/60 flex flex-col hover:shadow-card-hover hover:-translate-y-0.5 transition-all">
       <button onClick={() => onView(company)} className="flex flex-col items-center text-center group">
@@ -130,10 +140,10 @@ export function CompanyCard({ company, avg, count, onView, onRate }: Props) {
           {showLogo ? (
             <div className="size-16 rounded-2xl bg-card border border-border/60 flex items-center justify-center overflow-hidden p-2">
               <img
-                src={logoUrl!}
+                src={logoUrl}
                 alt={`${company.name} logo`}
                 className="max-h-full max-w-full object-contain"
-                onError={() => setLogoFailed(true)}
+                onError={() => setSrcIdx((i) => i + 1)}
                 loading="lazy"
               />
             </div>
