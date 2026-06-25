@@ -119,10 +119,12 @@ function logoDomain(company: Company): string | null {
 
 function logoSources(domain: string): string[] {
   // Try multiple favicon services in order — different ones index different .zm domains.
+  // DuckDuckGo returns crisp logos when available (404 otherwise → triggers onError).
+  // Google returns either the real favicon or a generic globe placeholder; we filter
+  // the placeholder by checking naturalWidth in onLoad.
   return [
     `https://icons.duckduckgo.com/ip3/${domain}.ico`,
     `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
-    `https://icon.horse/icon/${domain}`,
   ];
 }
 
@@ -131,8 +133,9 @@ export function CompanyCard({ company, avg, count, onView, onRate }: Props) {
   const domain = logoDomain(company);
   const sources = domain ? logoSources(domain) : [];
   const [srcIdx, setSrcIdx] = useState(0);
-  const logoUrl = sources[srcIdx] ?? null;
-  const showLogo = !!logoUrl;
+  const [logoOk, setLogoOk] = useState(true);
+  const logoUrl = sources[srcIdx];
+  const showLogo = !!logoUrl && logoOk;
   return (
     <article className="bg-card rounded-2xl p-5 shadow-card border border-border/60 flex flex-col hover:shadow-card-hover hover:-translate-y-0.5 transition-all">
       <button onClick={() => onView(company)} className="flex flex-col items-center text-center group">
@@ -143,7 +146,18 @@ export function CompanyCard({ company, avg, count, onView, onRate }: Props) {
                 src={logoUrl}
                 alt={`${company.name} logo`}
                 className="max-h-full max-w-full object-contain"
-                onError={() => setSrcIdx((i) => i + 1)}
+                onError={() => {
+                  if (srcIdx + 1 < sources.length) setSrcIdx(srcIdx + 1);
+                  else setLogoOk(false);
+                }}
+                onLoad={(e) => {
+                  // Filter out generic globe placeholders (tiny default favicons).
+                  const w = e.currentTarget.naturalWidth;
+                  if (w > 0 && w < 24) {
+                    if (srcIdx + 1 < sources.length) setSrcIdx(srcIdx + 1);
+                    else setLogoOk(false);
+                  }
+                }}
                 loading="lazy"
               />
             </div>
