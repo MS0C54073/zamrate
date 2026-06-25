@@ -15,6 +15,36 @@ function initials(name: string) {
   return name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
 }
 
+// Known Zambian company → official website domain (for Clearbit logo lookup)
+const KNOWN_DOMAINS: Record<string, string> = {
+  "zanaco bank": "zanaco.co.zm",
+  "zanaco": "zanaco.co.zm",
+  "stanbic bank": "stanbicbank.co.zm",
+  "stanbic bank zambia": "stanbicbank.co.zm",
+  "mtn zambia": "mtn.zm",
+  "mtn": "mtn.zm",
+  "airtel zambia": "airtel.co.zm",
+  "airtel": "airtel.co.zm",
+  "absa bank zambia": "absa.co.zm",
+  "absa": "absa.co.zm",
+  "zesco limited": "zesco.co.zm",
+  "zesco": "zesco.co.zm",
+  "first national bank": "fnbzambia.co.zm",
+  "fnb zambia": "fnbzambia.co.zm",
+  "cavmont bank": "cavmont.com.zm",
+  "access bank zambia": "accessbankplc.com",
+  "bank of zambia": "boz.zm",
+  "zambia national commercial bank": "zanaco.co.zm",
+  "indo zambia bank": "izb.co.zm",
+  "atlas mara": "atlasmara.com",
+  "zamtel": "zamtel.zm",
+  "liquid intelligent technologies": "liquid.tech",
+  "puma energy": "pumaenergy.com",
+  "shoprite": "shoprite.co.za",
+  "pick n pay": "pnp.co.za",
+  "game stores": "game.co.za",
+};
+
 function domainFromWebsite(url: string | null): string | null {
   if (!url) return null;
   try {
@@ -25,10 +55,10 @@ function domainFromWebsite(url: string | null): string | null {
   }
 }
 
-export function CompanyCard({ company, avg, count, onView, onRate }: Props) {
-  const Icon = iconFor(company.category);
-  const domain = domainFromWebsite(company.website);
-  const logoUrl = domain ? `https://logo.clearbit.com/${domain}` : null;
+function logoDomain(company: Company): string | null {
+  const key = company.name.trim().toLowerCase();
+  return KNOWN_DOMAINS[key] ?? domainFromWebsite(company.website);
+}
   return (
     <article className="bg-card rounded-2xl p-5 shadow-card border border-border/60 flex flex-col hover:shadow-card-hover hover:-translate-y-0.5 transition-all">
       <button onClick={() => onView(company)} className="flex flex-col items-center text-center group">
