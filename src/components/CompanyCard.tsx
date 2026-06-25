@@ -16,34 +16,90 @@ function initials(name: string) {
   return name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
 }
 
-// Known Zambian company → official website domain (for Clearbit logo lookup)
+// Known Zambian company → official website domain (used for favicon resolution)
 const KNOWN_DOMAINS: Record<string, string> = {
-  "zanaco bank": "zanaco.co.zm",
-  "zanaco": "zanaco.co.zm",
-  "stanbic bank": "stanbicbank.co.zm",
-  "stanbic bank zambia": "stanbicbank.co.zm",
-  "mtn zambia": "mtn.zm",
-  "mtn": "mtn.zm",
-  "airtel zambia": "airtel.co.zm",
-  "airtel": "airtel.co.zm",
+  // Banks & Financial
   "absa bank zambia": "absa.co.zm",
-  "absa": "absa.co.zm",
-  "zesco limited": "zesco.co.zm",
-  "zesco": "zesco.co.zm",
-  "first national bank": "fnbzambia.co.zm",
-  "fnb zambia": "fnbzambia.co.zm",
-  "cavmont bank": "cavmont.com.zm",
   "access bank zambia": "accessbankplc.com",
   "bank of zambia": "boz.zm",
-  "zambia national commercial bank": "zanaco.co.zm",
+  "cavmont bank": "cavmont.com.zm",
+  "first capital bank zambia": "firstcapitalbank.co.zm",
+  "first national bank": "fnbzambia.co.zm",
+  "fnb zambia": "fnbzambia.co.zm",
   "indo zambia bank": "izb.co.zm",
+  "stanbic bank": "stanbicbank.co.zm",
+  "stanbic bank zambia": "stanbicbank.co.zm",
+  "zanaco": "zanaco.co.zm",
+  "zanaco bank": "zanaco.co.zm",
+  "zambia national commercial bank": "zanaco.co.zm",
   "atlas mara": "atlasmara.com",
+  // Internet / Telcos
+  "airtel": "airtel.co.zm",
+  "airtel zambia": "airtel.co.zm",
+  "mtn": "mtn.zm",
+  "mtn zambia": "mtn.zm",
   "zamtel": "zamtel.zm",
   "liquid intelligent technologies": "liquid.tech",
+  "liquid intelligent technologies zambia": "liquid.tech",
+  "starlink zambia": "starlink.com",
+  // Energy & Utilities
+  "zesco": "zesco.co.zm",
+  "zesco limited": "zesco.co.zm",
+  "copperbelt energy corporation": "cec.com.zm",
   "puma energy": "pumaenergy.com",
+  // Retail & FMCG
   "shoprite": "shoprite.co.za",
+  "shoprite zambia": "shoprite.co.za",
   "pick n pay": "pnp.co.za",
+  "pick n pay zambia": "pnp.co.za",
   "game stores": "game.co.za",
+  "zambeef products plc": "zambeefplc.com",
+  // Restaurants & Food
+  "hungry lion zambia": "hungrylion.co.za",
+  "rhapsody's zambia": "rhapsodys.co.za",
+  "food fayre": "foodfayre.com",
+  "mint lounge lusaka": "mintloungelusaka.com",
+  // Hospitals & Healthcare
+  "coptic hospital": "coptichospital.org.zm",
+  "fairview hospital": "fairviewhospital.co.zm",
+  "medland hospital": "medlandhospital.com",
+  "university teaching hospital": "uth.gov.zm",
+  "care for business medical clinic": "cfb.co.zm",
+  // Insurance
+  "hollard zambia": "hollard.co.zm",
+  "madison general insurance": "madison.co.zm",
+  "sanlam zambia": "sanlam.co.zm",
+  "professional insurance corporation zambia": "picz.co.zm",
+  // Schools & Education
+  "university of zambia": "unza.zm",
+  "copperbelt university": "cbu.ac.zm",
+  "international school of lusaka": "isl.edu.zm",
+  "lusaka apex medical university": "lamu.edu.zm",
+  "noah's ark school": "noahsarkschool.co.zm",
+  "zambia qualifications authority": "zaqa.gov.zm",
+  // Transport & Logistics
+  "yango zambia": "yango.com",
+  "ulendo taxi and delivery services": "ulendo.app",
+  "power tools bus services": "powertools.co.zm",
+  "ubz": "ubz.co.zm",
+  "zambia railways": "zrl.com.zm",
+  // Construction & Engineering
+  "avic international zambia": "avic-intl.cn",
+  "datong construction zambia": "datongconstruction.com",
+  "stefanutti stocks zambia": "stefanuttistocks.com",
+  // Agriculture & Industrial
+  "etg cure chem zambia": "etgworld.com",
+  "saro agro industrial ltd": "saroafrica.com",
+  "zambia fertilizer company": "zambiafertilizers.com",
+  // Cleaning & Facility / Legal / Professional
+  "clean care zambia": "cleancare.co.zm",
+  "fresh start cleaning services": "freshstart.co.zm",
+  "sparkle cleaning zambia": "sparkle.co.zm",
+  "mint master security zambia ltd": "mintmastersecurity.com",
+  "sucar": "sucar.co.zm",
+  "am hlazo and co": "amhlazo.com",
+  "corpus globe corporate services": "corpusglobe.com",
+  "mulenga mundashi legal practitioners": "mmco.co.zm",
 };
 
 function domainFromWebsite(url: string | null): string | null {
