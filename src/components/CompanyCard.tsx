@@ -63,7 +63,7 @@ function logoDomain(company: Company): string | null {
 export function CompanyCard({ company, avg, count, onView, onRate }: Props) {
   const Icon = iconFor(company.category);
   const domain = logoDomain(company);
-  const logoUrl = domain ? `https://logo.clearbit.com/${domain}` : null;
+  const logoUrl = domain ? `https://www.google.com/s2/favicons?domain=${domain}&sz=128` : null;
   return (
     <article className="bg-card rounded-2xl p-5 shadow-card border border-border/60 flex flex-col hover:shadow-card-hover hover:-translate-y-0.5 transition-all">
       <button onClick={() => onView(company)} className="flex flex-col items-center text-center group">
