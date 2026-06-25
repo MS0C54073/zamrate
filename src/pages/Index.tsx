@@ -145,15 +145,17 @@ export default function Index() {
             alt=""
             width={1920}
             height={640}
-            className="absolute right-0 top-0 h-full w-[70%] object-cover object-bottom opacity-60 dark:opacity-25"
+            className="absolute right-0 top-0 h-full w-[65%] object-cover object-bottom opacity-50 dark:opacity-20 [mask-image:linear-gradient(to_right,transparent_0%,black_30%,black_100%)]"
           />
           <img
-            src={zambiaFlag.url}
+            src={zambiaFlag}
             alt=""
-            className="absolute right-6 top-6 w-[360px] max-w-[42%] h-auto rounded-md shadow-2xl ring-1 ring-black/10 rotate-[-3deg] opacity-90 dark:opacity-80"
+            width={896}
+            height={1024}
+            className="absolute -right-4 -top-6 h-[125%] w-auto object-contain opacity-95 dark:opacity-85 drop-shadow-2xl"
           />
           {/* Left-to-right fade so text stays readable */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 via-40% to-background/20" />
           <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-background" />
         </div>
 
