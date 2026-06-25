@@ -6,6 +6,7 @@ export interface Company {
   services: string | null;
   location: string | null;
   website: string | null;
+  logo_url?: string | null;
   /** Public anonymous queries cannot read this column. */
   phone?: string | null;
   /** Public anonymous queries cannot read this column. */
