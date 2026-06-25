@@ -1,46 +1,56 @@
-# ZamRate — The People's Pulse: Zambia
+# ZamRate — The People's Pulse of Zambia 🇿🇲
 
-ZamRate is a citizen-driven, privacy-first review platform for Zambian companies and public services. Real reviews. Real experiences. Real impact.
+> Real reviews. Real experiences. Real impact.
 
-## Highlights
+ZamRate is a **privacy-first, anonymous** company rating platform built for the people of Zambia. No accounts, no tracking, no personal data — just honest community feedback that drives transparency and accountability across banks, telcos, healthcare, education, retail, energy, transport and more.
 
-- 🇿🇲 **Built for Zambia** — categories, companies and copy localized for the Zambian market.
-- 🛡️ **Privacy-first** — 100% anonymous ratings. No tracking, no personal data collected from raters.
-- ⭐ **Honest ratings** — 1–5 star ratings with comments, surfaced as top-rated companies per category.
-- 📡 **Live activity** — see new ratings stream in as they happen.
-- 🏛️ **Real categories** — Banks, Telcos, Health, Education, Retail, Energy, Transport and more.
+## ✨ Features
 
-## Tech stack
+- **Anonymous ratings & reviews** — rate any company without signing up
+- **Real brand identity** — every company card pulls its real logo via favicon resolution, with a known-domain map for major Zambian brands (Zanaco, Stanbic, MTN, Airtel, ZESCO, Absa, FNB, Cavmont, ZAMTEL, Bank of Zambia, and more)
+- **Category explorer** — Banks, Telcos, Health, Education, Retail, Energy, Transport
+- **Live activity feed** — see anonymous ratings stream in over Realtime
+- **Suggest a company** — community-driven catalogue, moderated by admins
+- **Light & dark mode** — warm civic palette tuned for both
+- **Hero with the real Zambian flag** waving over a soft Lusaka skyline
 
-- **Frontend:** React 18 + Vite 5 + TypeScript + Tailwind CSS v3 + shadcn/ui
-- **Backend:** Lovable Cloud (Postgres, Auth, Realtime, Storage, Edge Functions)
-- **Icons:** lucide-react
-- **Typography:** Fraunces (display) + Plus Jakarta Sans (body)
+## 🎨 Design
 
-## Design system
+- **Typography:** Fraunces (display) + Inter (body)
+- **Light mode:** warm off-white, deep navy ink, teal primary, sun-gold accent
+- **Dark mode:** deep navy `220 32% 8%`, teal primary `174 62% 52%`, warm cream text `40 30% 94%`, gold accent `38 92% 62%`
+- **Components:** shadcn/ui on Tailwind CSS, fully semantic design tokens — no hard-coded colors
+- **Icons:** Lucide
 
-A warm civic palette with a Zambian sensibility:
+## 🛡️ Security & Privacy
 
-- **Primary:** deep teal (Zambian green-adjacent)
-- **Accent:** warm gold (eagle / sovereignty)
-- **Light mode:** soft sky/ivory background, crisp cards
-- **Dark mode:** deep navy slate, teal accents, warm cream text — readable and elegant
+- **No personal data collected** — anonymous IDs are random, browser-local
+- **Row Level Security** on every public table
+- **Strict ownership checks** on rating/vote updates (anonymous ID matched via request header — no `OR true` bypasses)
+- **PII columns locked down** — `email`, `phone`, and `anonymous_user_id` are not readable by anonymous clients
+- **Security-definer helpers** live in a private schema, not exposed via the API
+- **Realtime locked** to `postgres_changes` only
 
-The hero features the Zambian flag layered over a soft Lusaka skyline illustration as the section background.
+## 🧱 Tech Stack
 
-## Getting started
+- **Frontend:** React 18, Vite 5, TypeScript 5, Tailwind CSS v3, shadcn/ui
+- **Backend:** Lovable Cloud (Postgres + Auth + Realtime + Storage + Edge Functions)
+- **State:** TanStack Query
+- **Routing:** React Router
+
+## 🚀 Local development
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open the URL printed by Vite (usually http://localhost:8080).
+The app runs at `http://localhost:8080`.
 
-## Security
+## 📦 Deployment
 
-The schema is protected by Row-Level Security on every public table. Helper functions used inside policies (`has_role`, `is_admin_tier`, `is_blocked`) live in a private schema and are not exposed to the Data API. Rating updates/deletes are scoped to the `x-anon-id` header — no `OR true` escape hatches.
+Open the project in [Lovable](https://lovable.dev) and click **Publish**. Custom domains are configured under Project → Settings → Domains.
 
-## License
+---
 
-© ZamRate. Built for the people of Zambia.
+Built with ❤️ for Zambia.
