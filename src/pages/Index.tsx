@@ -11,7 +11,7 @@ import { CompanyCard } from "@/components/CompanyCard";
 import { CompanyDetailDialog } from "@/components/CompanyDetailDialog";
 import { SuggestCompanyDialog } from "@/components/SuggestCompanyDialog";
 import zamrateIcon from "@/assets/zamrate-icon.png";
-import zambiaFlag from "@/assets/zambia-flag-real.png.asset.json";
+import zambiaFlag from "@/assets/zambia-flag-wave.png";
 import lusakaSkyline from "@/assets/lusaka-skyline.jpg";
 import type { Company } from "@/types";
 import { LiveActivity } from "@/components/LiveActivity";
