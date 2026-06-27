@@ -34,7 +34,7 @@ ZamRate is a **privacy-first, anonymous** company rating platform built for the 
 ## 🧱 Tech Stack
 
 - **Frontend:** React 18, Vite 5, TypeScript 5, Tailwind CSS v3, shadcn/ui
-- **Backend:** Lovable Cloud (Postgres + Auth + Realtime + Storage + Edge Functions)
+- **Backend:** Supabase (Postgres + Auth + Realtime + Storage + Edge Functions)
 - **State:** TanStack Query
 - **Routing:** React Router
 
@@ -49,7 +49,13 @@ The app runs at `http://localhost:8080`.
 
 ## 📦 Deployment
 
-Open the project in [Lovable](https://lovable.dev) and click **Publish**. Custom domains are configured under Project → Settings → Domains.
+Build the project and deploy to your hosting provider of choice:
+
+```bash
+npm run build
+```
+
+The output is in the `dist/` folder.
 
 ---
 
