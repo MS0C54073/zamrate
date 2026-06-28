@@ -25,7 +25,10 @@ export default function Index() {
   const [activeCategory, setActiveCategory] = useState<string>(ALL_CATEGORY.name);
   const [selected, setSelected] = useState<Company | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const catRowRef = useRef<HTMLDivElement | null>(null);
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     void load();
@@ -72,6 +75,27 @@ export default function Index() {
     });
   }, [companies, search, activeCategory]);
 
+  const suggestions = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return [];
+    const matches = companies
+      .map((company) => ({
+        company,
+        score:
+          (company.name.toLowerCase().startsWith(q) ? 3 : 0) +
+          (company.category.toLowerCase().startsWith(q) ? 2 : 0) +
+          (company.name.toLowerCase().includes(q) ? 1 : 0) +
+          (company.category.toLowerCase().includes(q) ? 1 : 0) +
+          ((company.description?.toLowerCase().includes(q) ?? false) ? 0.5 : 0) +
+          ((company.services?.toLowerCase().includes(q) ?? false) ? 0.5 : 0),
+      }))
+      .filter((item) => item.score > 0)
+      .sort((a, b) => b.score - a.score || a.company.name.localeCompare(b.company.name))
+      .slice(0, 6)
+      .map((item) => item.company);
+    return matches;
+  }, [companies, search]);
+
   const topRated = useMemo(() => {
     return [...filtered]
       .map((c) => ({ c, a: agg[c.id] }))
@@ -103,15 +127,76 @@ export default function Index() {
           </a>
           <div className="flex-1 max-w-2xl relative">
             <Globe className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search for companies, categories or keywords…"
-              className="pl-11 pr-16 bg-secondary/70 border-transparent focus-visible:bg-card focus-visible:border-primary rounded-full h-11 text-sm"
-            />
-            <kbd className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 items-center gap-1 px-2 py-0.5 rounded-md border border-border bg-card text-[11px] text-muted-foreground font-mono">
-              ⌘K
-            </kbd>
+            <div className="relative">
+              <Input
+                ref={searchInputRef}
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setShowSuggestions(true);
+                  setHighlightedIndex(-1);
+                }}
+                onFocus={() => setShowSuggestions(true)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                onKeyDown={(e) => {
+                  if (!suggestions.length) return;
+                  if (e.key === "ArrowDown") {
+                    e.preventDefault();
+                    setHighlightedIndex((prev) => Math.min(prev + 1, suggestions.length - 1));
+                    setShowSuggestions(true);
+                  }
+                  if (e.key === "ArrowUp") {
+                    e.preventDefault();
+                    setHighlightedIndex((prev) => Math.max(prev - 1, 0));
+                    setShowSuggestions(true);
+                  }
+                  if (e.key === "Enter" && highlightedIndex >= 0) {
+                    e.preventDefault();
+                    const company = suggestions[highlightedIndex];
+                    setSearch(company.name);
+                    setShowSuggestions(false);
+                    setHighlightedIndex(-1);
+                    openDetail(company);
+                  }
+                }}
+                placeholder="Search for companies, categories or keywords…"
+                className="pl-11 pr-16 bg-secondary/70 border-transparent focus-visible:bg-card focus-visible:border-primary rounded-full h-11 text-sm"
+              />
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">⌘K</div>
+              {showSuggestions && suggestions.length > 0 && (
+                <div className="absolute left-0 right-0 mt-2 rounded-2xl border border-border bg-card shadow-xl shadow-black/5 overflow-hidden z-20">
+                  <div className="px-4 py-3 border-b border-border/70 text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                    Suggestions
+                  </div>
+                  <div className="max-h-72 overflow-y-auto">
+                    {suggestions.map((company, index) => {
+                      const active = index === highlightedIndex;
+                      return (
+                        <button
+                          key={company.id}
+                          type="button"
+                          onMouseDown={(event) => event.preventDefault()}
+                          onClick={() => {
+                            setSearch(company.name);
+                            setShowSuggestions(false);
+                            setHighlightedIndex(-1);
+                            openDetail(company);
+                          }}
+                          className={`w-full text-left px-4 py-3 transition ${
+                            active ? "bg-primary/10 text-primary" : "hover:bg-secondary"
+                          }`}
+                        >
+                          <div className="font-semibold">{company.name}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {company.category} · {company.location ?? "Zambia"}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
           <nav className="hidden lg:flex items-center gap-7 text-sm font-medium text-foreground/80">
             <a href="#explore" className="hover:text-primary flex items-center gap-1">
