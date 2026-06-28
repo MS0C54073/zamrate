@@ -45,6 +45,7 @@ const KNOWN_DOMAINS: Record<string, string> = {
   // Energy & Utilities
   "zesco": "zesco.co.zm",
   "zesco limited": "zesco.co.zm",
+  "zesco ltd": "zesco.co.zm",
   "copperbelt energy corporation": "cec.com.zm",
   "puma energy": "pumaenergy.com",
   // Retail & FMCG
