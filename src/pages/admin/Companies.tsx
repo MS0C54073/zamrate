@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Pencil, Trash2, Plus, Search, ImagePlus, Building2 } from "lucide-react";
+import { Pencil, Trash2, Plus, Search, ImagePlus, Building2, Globe } from "lucide-react";
 import { toast } from "sonner";
 import { useAdmin, logAdminAction } from "@/hooks/useAdmin";
 import { CATEGORIES } from "@/lib/categories";
@@ -177,9 +177,9 @@ export default function Companies() {
       <div className="space-y-2">
         {filtered.map((c) => (
           <Card key={c.id} className="rounded-2xl">
-            <CardContent className="p-4 flex flex-wrap items-center gap-4">
+<CardContent className="p-4 flex flex-wrap items-center gap-4">
               <div className="size-12 rounded-xl bg-secondary overflow-hidden flex items-center justify-center shrink-0">
-                {c.logo_url ? <img src={c.logo_url} alt={c.name} className="w-full h-full object-cover" /> : <Building2 className="size-5 text-muted-foreground" />}
+                {getLogo(c) ? <img src={getLogo(c)!} alt={c.name} className="w-full h-full object-contain p-1" /> : <Building2 className="size-5 text-muted-foreground" />}
               </div>
               <div className="flex-1 min-w-48">
                 <div className="flex items-center gap-2 mb-1 flex-wrap">
@@ -231,8 +231,8 @@ export default function Companies() {
             <div className="sm:col-span-2"><Field label="Services"><Textarea rows={2} value={form.services ?? ""} onChange={(e) => setForm({ ...form, services: e.target.value })} maxLength={2000} /></Field></div>
             <div className="sm:col-span-2">
               <Label className="text-xs uppercase tracking-widest font-bold text-muted-foreground">Logo (PNG, JPG, WEBP · max 2MB)</Label>
-              <div className="flex items-center gap-3 mt-1">
-                {editing?.logo_url && !logoFile && <img src={editing.logo_url} className="size-14 rounded-xl object-cover bg-secondary" alt="" />}
+<div className="flex items-center gap-3 mt-1">
+                {editing && !logoFile && getLogo(editing) && <img src={getLogo(editing)!} className="size-14 rounded-xl object-contain bg-secondary p-1" alt="" />}
                 {logoFile && <div className="size-14 rounded-xl bg-secondary flex items-center justify-center"><ImagePlus className="size-5 text-muted-foreground" /></div>}
                 <Input type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => setLogoFile(e.target.files?.[0] ?? null)} />
               </div>
@@ -268,6 +268,30 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       {children}
     </div>
   );
+}
+
+const SUPABASE_PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID as string | undefined;
+
+function logoProxyUrl(domain: string): string | null {
+  if (!SUPABASE_PROJECT_ID) return null;
+  return `https://${SUPABASE_PROJECT_ID}.supabase.co/functions/v1/company-logo?domain=${encodeURIComponent(domain)}`;
+}
+
+function domainFromWebsite(url: string | null): string | null {
+  if (!url) return null;
+  try {
+    const u = new URL(url.startsWith("http") ? url : `https://${url}`);
+    return u.hostname.replace(/^www\./, "");
+  } catch {
+    return null;
+  }
+}
+
+function getLogo(c: Company) {
+  if (c.logo_url) return c.logo_url;
+  const domain = domainFromWebsite(c.website);
+  if (domain) return logoProxyUrl(domain);
+  return null;
 }
 
 function StatusBadge({ status }: { status: string }) {

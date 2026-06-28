@@ -7,6 +7,11 @@ import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 
 const DDG_PLACEHOLDER_BYTES = 1478;
 
+function logoDev(domain: string) {
+  // Use Logo.dev with fallback=404 to handle missing logos gracefully
+  return `https://img.logo.dev/${domain}?size=128&fallback=404`;
+}
+
 function googleFavicon(host: string) {
   return `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://${host}&size=128`;
 }
@@ -24,6 +29,7 @@ function buildSources(domain: string): string[] {
   const bare = domain.replace(/^www\./, "");
   const www = `www.${bare}`;
   return [
+    logoDev(bare),
     googleFavicon(www),
     googleFavicon(bare),
     `https://icons.duckduckgo.com/ip3/${bare}.ico`,
