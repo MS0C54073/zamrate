@@ -51,6 +51,7 @@ const KNOWN_DOMAINS: Record<string, string> = {
   // Energy & Utilities
   "zesco": "zesco.co.zm",
   "zesco limited": "zesco.co.zm",
+  "zesco ltd": "zesco.co.zm",
   "copperbelt energy corporation": "cec.com.zm",
   "cec": "cec.com.zm",
   "puma energy": "pumaenergy.com",
@@ -125,6 +126,14 @@ const KNOWN_DOMAINS: Record<string, string> = {
   "am hlazo and co": "amhlazo.com",
   "corpus globe corporate services": "corpusglobe.com",
   "mulenga mundashi legal practitioners": "mmco.co.zm",
+  // Additional mappings
+  "zambia sugar plc": "zambiasugar.com",
+  "zamnet": "zamnet.zm",
+  "zoran café": "zorancafe.com",
+  "zoran cafe": "zorancafe.com",
+  "zsic": "zsic.co.zm",
+  "zsic general insurance": "zsicgi.co.zm",
+  "zsic life": "zsiclife.co.zm",
 };
 
 function domainFromWebsite(url: string | null): string | null {
