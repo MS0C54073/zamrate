@@ -78,7 +78,7 @@ const KNOWN_DOMAINS: Record<string, string> = {
   "steers zambia": "steers.co.za",
   // Hospitals & Healthcare
   "coptic hospital": "coptichospital.org.zm",
-  "fairview hospital": "fairviewhospital.co.zm",
+  "fairview hospital": "ihzfairview.com",
   "medland hospital": "medlandhospital.com",
   "university teaching hospital": "uth.gov.zm",
   "care for business medical clinic": "cfb.co.zm",
@@ -134,27 +134,11 @@ const KNOWN_DOMAINS: Record<string, string> = {
   "zsic": "zsic.co.zm",
   "zsic general insurance": "zsicgi.co.zm",
   "zsic life": "zsiclife.co.zm",
-  // Newly added / corrected
-  "fairview hospital": "ihzfairview.com",
+  // Newly added
   "zamnet communication systems": "zamnet.zm",
   "prudential life assurance zambia": "prudential.co.zm",
   "atlas mara zambia": "zambia.accessbankplc.com",
   "puma energy zambia": "pumaenergy.com",
-  "seed co zambia": "seedcogroup.com",
-  "proflight zambia": "proflight-zambia.com",
-  "mulungushi university": "mu.ac.zm",
-  "choppies zambia": "choppies.co.bw",
-  "spar zambia": "spar.co.za",
-  "game stores zambia": "game.co.za",
-  "steers zambia": "steers.co.za",
-  "kfc zambia": "kfc.co.za",
-  "debonairs pizza zambia": "debonairspizza.co.za",
-  "paratus zambia": "paratus.africa",
-  "iconnect zambia": "iconnect.zm",
-  "ecobank zambia": "ecobank.com",
-  "investrust bank": "investrustbank.co.zm",
-  "indo zambia bank": "izb.co.zm",
-  "fnb zambia": "fnbzambia.co.zm",
 };
 
 function domainFromWebsite(url: string | null): string | null {
