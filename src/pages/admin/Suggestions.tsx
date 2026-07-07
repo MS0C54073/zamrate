@@ -13,13 +13,17 @@ import { toast } from "sonner";
 import { useAdmin, logAdminAction } from "@/hooks/useAdmin";
 import { CATEGORIES } from "@/lib/categories";
 
-interface Sug { id: string; company_name: string; category: string; description: string | null; services: string | null; status: string; created_at: string; }
+interface Sug { id: string; company_name: string; category: string; description: string | null; services: string | null; logo_url: string | null; status: string; created_at: string; }
+
+const ALLOWED = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+const MAX_BYTES = 2 * 1024 * 1024;
 
 export default function Suggestions() {
   const { can } = useAdmin();
   const [rows, setRows] = useState<Sug[]>([]);
   const [editing, setEditing] = useState<Sug | null>(null);
   const [form, setForm] = useState<Sug | null>(null);
+  const [replacementLogo, setReplacementLogo] = useState<File | null>(null);
 
   useEffect(() => { void load(); }, []);
   async function load() {
@@ -27,13 +31,31 @@ export default function Suggestions() {
     setRows((data ?? []) as Sug[]);
   }
 
+  async function uploadReplacementLogo(companyId: string): Promise<string | null> {
+    if (!replacementLogo) return null;
+    if (!ALLOWED.includes(replacementLogo.type)) { toast.error("Logo must be PNG, JPG or WEBP"); return null; }
+    if (replacementLogo.size > MAX_BYTES) { toast.error("Logo must be under 2MB"); return null; }
+    const ext = replacementLogo.name.split(".").pop()?.toLowerCase() ?? "png";
+    const path = `public/${companyId}-${Date.now()}.${ext}`;
+    const { error } = await supabase.storage.from("company-logos").upload(path, replacementLogo, {
+      upsert: true, contentType: replacementLogo.type,
+    });
+    if (error) { toast.error(`Logo upload failed: ${error.message}`); return null; }
+    return supabase.storage.from("company-logos").getPublicUrl(path).data.publicUrl;
+  }
+
   async function approve(s: Sug) {
     const final = form && form.id === s.id ? form : s;
     const { data, error } = await supabase.from("companies").insert({
       name: final.company_name, category: final.category,
-      description: final.description, services: final.services, status: "approved",
+      description: final.description, services: final.services,
+      logo_url: final.logo_url, status: "approved",
     }).select("id").single();
     if (error) return toast.error(error.message);
+    const replacement = await uploadReplacementLogo(data.id);
+    if (replacement) {
+      await supabase.from("companies").update({ logo_url: replacement }).eq("id", data.id);
+    }
     await supabase.from("company_suggestions").update({ status: "approved" }).eq("id", s.id);
     await logAdminAction("suggestion.approve", "suggestion", s.id, final.company_name);
     toast.success("Approved & added. You can upload a logo from Companies.");
@@ -61,24 +83,31 @@ export default function Suggestions() {
       <div className="space-y-3">
         {rows.map((s) => (
           <Card key={s.id} className="rounded-2xl">
-            <CardContent className="p-4">
-              <div className="flex flex-wrap items-center gap-2 mb-2 text-xs text-muted-foreground">
-                <StatusBadge status={s.status} />
-                <Badge variant="outline">{s.category}</Badge>
-                <span>· {new Date(s.created_at).toLocaleString()}</span>
+            <CardContent className="p-4 flex gap-4">
+              <div className="size-16 rounded-xl bg-secondary shrink-0 flex items-center justify-center overflow-hidden">
+                {s.logo_url
+                  ? <img src={s.logo_url} alt={`${s.company_name} logo`} className="w-full h-full object-contain p-1" />
+                  : <span className="text-xs text-muted-foreground">No logo</span>}
               </div>
-              <h3 className="font-display text-lg">{s.company_name}</h3>
-              {s.description && <p className="text-sm text-muted-foreground mt-1">{s.description}</p>}
-              {s.services && <p className="text-xs text-muted-foreground mt-1"><strong>Services:</strong> {s.services}</p>}
-              <div className="flex flex-wrap gap-2 mt-3">
-                {s.status === "pending" && (
-                  <>
-                    <Button size="sm" onClick={() => approve(s)} className="rounded-xl gap-1"><Check className="size-3" /> Approve</Button>
-                    <Button size="sm" variant="outline" onClick={() => { setEditing(s); setForm(s); }} className="rounded-xl gap-1"><Pencil className="size-3" /> Edit & approve</Button>
-                    <Button size="sm" variant="outline" onClick={() => reject(s.id)} className="rounded-xl gap-1"><X className="size-3" /> Reject</Button>
-                  </>
-                )}
-                {can.deleteSuggestions && <Button size="sm" variant="destructive" onClick={() => remove(s.id)} className="rounded-xl gap-1"><Trash2 className="size-3" /> Delete</Button>}
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-wrap items-center gap-2 mb-2 text-xs text-muted-foreground">
+                  <StatusBadge status={s.status} />
+                  <Badge variant="outline">{s.category}</Badge>
+                  <span>· {new Date(s.created_at).toLocaleString()}</span>
+                </div>
+                <h3 className="font-display text-lg">{s.company_name}</h3>
+                {s.description && <p className="text-sm text-muted-foreground mt-1">{s.description}</p>}
+                {s.services && <p className="text-xs text-muted-foreground mt-1"><strong>Services:</strong> {s.services}</p>}
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {s.status === "pending" && (
+                    <>
+                      <Button size="sm" onClick={() => approve(s)} className="rounded-xl gap-1"><Check className="size-3" /> Approve</Button>
+                      <Button size="sm" variant="outline" onClick={() => { setEditing(s); setForm(s); setReplacementLogo(null); }} className="rounded-xl gap-1"><Pencil className="size-3" /> Edit & approve</Button>
+                      <Button size="sm" variant="outline" onClick={() => reject(s.id)} className="rounded-xl gap-1"><X className="size-3" /> Reject</Button>
+                    </>
+                  )}
+                  {can.deleteSuggestions && <Button size="sm" variant="destructive" onClick={() => remove(s.id)} className="rounded-xl gap-1"><Trash2 className="size-3" /> Delete</Button>}
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -86,7 +115,7 @@ export default function Suggestions() {
         {rows.length === 0 && <p className="text-center text-muted-foreground py-12">No suggestions yet.</p>}
       </div>
 
-      <Dialog open={!!editing} onOpenChange={(v) => !v && (setEditing(null), setForm(null))}>
+      <Dialog open={!!editing} onOpenChange={(v) => !v && (setEditing(null), setForm(null), setReplacementLogo(null))}>
         <DialogContent className="rounded-3xl max-w-xl">
           <DialogHeader><DialogTitle className="font-display text-2xl">Edit before approval</DialogTitle></DialogHeader>
           {form && (
@@ -100,10 +129,22 @@ export default function Suggestions() {
               </Field>
               <Field label="Description"><Textarea value={form.description ?? ""} onChange={(e) => setForm({ ...form, description: e.target.value })} maxLength={2000} /></Field>
               <Field label="Services"><Textarea value={form.services ?? ""} onChange={(e) => setForm({ ...form, services: e.target.value })} maxLength={2000} /></Field>
+              <Field label="Logo (PNG/JPG/WEBP · max 2MB)">
+                <div className="flex items-center gap-3">
+                  <div className="size-14 rounded-xl bg-secondary flex items-center justify-center overflow-hidden">
+                    {replacementLogo
+                      ? <img src={URL.createObjectURL(replacementLogo)} alt="" className="w-full h-full object-contain p-1" />
+                      : form.logo_url
+                        ? <img src={form.logo_url} alt="" className="w-full h-full object-contain p-1" />
+                        : <span className="text-[10px] text-muted-foreground">None</span>}
+                  </div>
+                  <Input type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => setReplacementLogo(e.target.files?.[0] ?? null)} />
+                </div>
+              </Field>
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" className="rounded-xl" onClick={() => { setEditing(null); setForm(null); }}>Cancel</Button>
+            <Button variant="outline" className="rounded-xl" onClick={() => { setEditing(null); setForm(null); setReplacementLogo(null); }}>Cancel</Button>
             <Button onClick={() => editing && approve(editing)} className="rounded-xl">Approve & add</Button>
           </DialogFooter>
         </DialogContent>

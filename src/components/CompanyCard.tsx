@@ -78,7 +78,7 @@ const KNOWN_DOMAINS: Record<string, string> = {
   "steers zambia": "steers.co.za",
   // Hospitals & Healthcare
   "coptic hospital": "coptichospital.org.zm",
-  "fairview hospital": "fairviewhospital.co.zm",
+  "fairview hospital": "ihzfairview.com",
   "medland hospital": "medlandhospital.com",
   "university teaching hospital": "uth.gov.zm",
   "care for business medical clinic": "cfb.co.zm",
@@ -134,6 +134,11 @@ const KNOWN_DOMAINS: Record<string, string> = {
   "zsic": "zsic.co.zm",
   "zsic general insurance": "zsicgi.co.zm",
   "zsic life": "zsiclife.co.zm",
+  // Newly added
+  "zamnet communication systems": "zamnet.zm",
+  "prudential life assurance zambia": "prudential.co.zm",
+  "atlas mara zambia": "zambia.accessbankplc.com",
+  "puma energy zambia": "pumaenergy.com",
 };
 
 function domainFromWebsite(url: string | null): string | null {
