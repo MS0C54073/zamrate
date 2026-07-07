@@ -13,13 +13,17 @@ import { toast } from "sonner";
 import { useAdmin, logAdminAction } from "@/hooks/useAdmin";
 import { CATEGORIES } from "@/lib/categories";
 
-interface Sug { id: string; company_name: string; category: string; description: string | null; services: string | null; status: string; created_at: string; }
+interface Sug { id: string; company_name: string; category: string; description: string | null; services: string | null; logo_url: string | null; status: string; created_at: string; }
+
+const ALLOWED = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+const MAX_BYTES = 2 * 1024 * 1024;
 
 export default function Suggestions() {
   const { can } = useAdmin();
   const [rows, setRows] = useState<Sug[]>([]);
   const [editing, setEditing] = useState<Sug | null>(null);
   const [form, setForm] = useState<Sug | null>(null);
+  const [replacementLogo, setReplacementLogo] = useState<File | null>(null);
 
   useEffect(() => { void load(); }, []);
   async function load() {
@@ -27,13 +31,31 @@ export default function Suggestions() {
     setRows((data ?? []) as Sug[]);
   }
 
+  async function uploadReplacementLogo(companyId: string): Promise<string | null> {
+    if (!replacementLogo) return null;
+    if (!ALLOWED.includes(replacementLogo.type)) { toast.error("Logo must be PNG, JPG or WEBP"); return null; }
+    if (replacementLogo.size > MAX_BYTES) { toast.error("Logo must be under 2MB"); return null; }
+    const ext = replacementLogo.name.split(".").pop()?.toLowerCase() ?? "png";
+    const path = `public/${companyId}-${Date.now()}.${ext}`;
+    const { error } = await supabase.storage.from("company-logos").upload(path, replacementLogo, {
+      upsert: true, contentType: replacementLogo.type,
+    });
+    if (error) { toast.error(`Logo upload failed: ${error.message}`); return null; }
+    return supabase.storage.from("company-logos").getPublicUrl(path).data.publicUrl;
+  }
+
   async function approve(s: Sug) {
     const final = form && form.id === s.id ? form : s;
     const { data, error } = await supabase.from("companies").insert({
       name: final.company_name, category: final.category,
-      description: final.description, services: final.services, status: "approved",
+      description: final.description, services: final.services,
+      logo_url: final.logo_url, status: "approved",
     }).select("id").single();
     if (error) return toast.error(error.message);
+    const replacement = await uploadReplacementLogo(data.id);
+    if (replacement) {
+      await supabase.from("companies").update({ logo_url: replacement }).eq("id", data.id);
+    }
     await supabase.from("company_suggestions").update({ status: "approved" }).eq("id", s.id);
     await logAdminAction("suggestion.approve", "suggestion", s.id, final.company_name);
     toast.success("Approved & added. You can upload a logo from Companies.");
