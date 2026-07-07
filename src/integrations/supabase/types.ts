@@ -177,6 +177,7 @@ export type Database = {
           created_at: string
           description: string | null
           id: string
+          logo_url: string | null
           services: string | null
           status: string
           suggested_by_anonymous_user_id: string
@@ -187,6 +188,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          logo_url?: string | null
           services?: string | null
           status?: string
           suggested_by_anonymous_user_id: string
@@ -197,6 +199,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          logo_url?: string | null
           services?: string | null
           status?: string
           suggested_by_anonymous_user_id?: string
